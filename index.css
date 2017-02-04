@@ -1,0 +1,14 @@
+html {
+	text-align: center;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+}
+
+td {
+	width: 30%;
+	padding: 20px;
+}
