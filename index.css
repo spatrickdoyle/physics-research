@@ -11,4 +11,26 @@ table {
 td {
 	width: 30%;
 	padding: 20px;
+
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+
+img {
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+
+.fadeOut {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+.fadeIn {
+	visibility: visible;
+	opacity: 1;
+	transition: visibility 0s linear 0s, opacity 300ms;
 }

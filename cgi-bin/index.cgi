@@ -1,178 +1,166 @@
 #!/bin/env python2
 
-# Import modules for CGI handling 
-import cgi,glob,os
-import cPickle as pickle
+#TODO:
+#Update all parameters
+#Make the form update dynamically while parameters are being entered
+#Make button for resetting parameters
+#Make back button
+#Change stylesheet links to fetch Google MDL resources locally
+#Make script generate better images
+#Test with AWS
+#Remove CGI debugging stuff
+#Make form POST, not GET
+
+# Import module for CGI handling 
+import cgi
+
+#Object wrappers for Google Material Design components
+import mdl
+
+#For debugging - remove or comment when complete
 import cgitb
 cgitb.enable()
 
-
-class CheckBox:
-    def __init__(self,name,label,default=False):
-        self.name = name
-        self.label = label
-        if default:
-            self.state = " checked"
-        else:
-            self.state = ""
-
-    def draw(self):
-        print '<label class="mdl-checkbox mdl-js-checkbox" for="'+self.name+'">'
-        print '<input type="checkbox" id="'+self.name+'" name="'+self.name+'" class="mdl-checkbox__input"'+self.state+'>'
-        print '<span class="mdl-checkbox__label">'+self.label+'</span>'
-        print '</label>'
-
-    def checkState(self,form):
-        if form.getvalue(self.name) == 'on':
-            self.changeState(True)
-        else:
-            self.changeState(False)
-
-    def changeState(self,state):
-        if state:
-            self.state = " checked"
-        else:
-            self.state = "";
-
-    def getState(self):
-        if self.state == "":
-            return False
-        else:
-            return True
-
-class RadioBox:
-    def __init__(self,name,labels,default=0):
-        self.name = name
-        self.labels = labels
-        self.states = ["" for i in range(len(labels))]
-        self.states[default] = " checked"
-
-    def draw(self):
-        for i in range(len(self.labels)):
-            print '<label class="mdl-radio mdl-js-radio" for="'+self.name+'-'+str(i)+'">'
-            print '<input type="radio" id="'+self.name+'-'+str(i)+'" class="mdl-radio__button" name="'+self.name+'" value="'+str(i)+'"'+self.states[i]+'>'
-            print '<span class="mdl-radio__label">'+self.labels[i]+'</span>'
-            print '</label><br/>'
-
-    def checkState(self,form):
-        self.changeState(int(form.getvalue(self.name)))
-
-    def changeState(self,state):
-        self.states = ["" for i in range(len(self.labels))]
-        self.states[state] = " checked"
-
-    def getState(self):
-        return self.states.index(" checked")
-
-class Text:
-    def __init__(self,name,label,default=None):
-        self.name = name
-        self.label = label
-        if default == None:
-            self.state = ""
-        else:
-            self.state = ' value="'+default+'"'
-
-    def draw(self):
-        print '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">'
-        print '<input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="'+self.name+'" id="'+self.name+'"'+self.state+'>'
-        print '<label class="mdl-textfield__label" for="'+self.name+'">'+self.label+'</label>'
-        print '<span class="mdl-textfield__error">Enter a number</span>'
-        print '</div><br/>'
-
-    def checkState(self,form):
-        self.changeState(form.getvalue(self.name))
-
-    def changeState(self,state):
-        if state == None:
-            self.state = ""
-        else:
-            self.state = ' value="'+state+'"'
-
-    def getState(self):
-        return self.state[8:-1]
-
-class Button:
-    def __init__(self,name,label):
-        self.name = name
-        self.label = label
-
-    def draw(self):
-        print '<button class="mdl-button mdl-js-button mdl-button--raised">'
-        print self.label
-        print '</button>'
+#Other things
+import glob,os,time
 
 
-# Create instance of FieldStorage 
+VERSION = '0.0'
+
+#Function to make a lockfile, invoke the Mathematica program, and wait for the graph to be generated
+def makeGraph():
+    #Create lockfile containing signature of the image being generated
+    lockfile = file('lockfile','w+')
+    lockfile.write("%s\n%s %s\n%s"%(newSignature,time.strftime("%X %x"),os.environ["REMOTE_ADDR"],os.environ['HTTP_USER_AGENT']))#Write signature, time and date of creation, invoking host ip, and user agent 
+    lockfile.close()
+
+    #Invoke the program
+    os.system("./script.py&")
+
+    #Check every 2 seconds to see if the graph is done being generated, and display it when it is
+    print "        <img id='graph' src='../loading.png'/>"
+    print '''        <script>var loop = setInterval(function() { if (UrlExists("../images/%s.jpg")) { clearInterval(loop); document.getElementById('graph').src = "../images/%s.jpg"; }; }, 2000);</script>'''%(newSignature,newSignature)
+
+
+#Create all the input elements that will be on the page
+boxes = [mdl.CheckBox('box0','Make more things appear',False,"toggleBlock2()")]
+radios = [mdl.RadioBox('PDFsetmethod',['Hessian','MC'],0),mdl.RadioBox('plottype',['single','multi','ALL','ProtonNutron'],0)]
+texts = []
+buttons = [mdl.Button('button1','SUBMIT')]
+
+#Get data from submitted form
 form = cgi.FieldStorage()
 
-boxes = [CheckBox('box0','Check Box 0'),CheckBox('box1','Check Box 1',True),CheckBox('box2','Check Box 2')]
-radios = [RadioBox('rad1',['Option 1','Option 2','Option 3'],1)]
-texts = [Text('text1','Text box 1'),Text('text2','Text box 2','1234.643')]
-buttons = [Button('button1','SUBMIT')]
+#Print packet header
+print "Content-type:text/html\r\n"
 
-print "Content-type:text/html\r\n\r\n"
-
+#The HTML bit
 print "<html>"
 
-print "<head>"
-print "<title>Physics test page</title>"
-print '''<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-<link rel="stylesheet" href="../index.css">'''
-print "</head>"
+print "    <head>"
+print "        <title>Physics test page</title>"
 
-print "<body>"
+#Links to Google Material Design stylesheets - DOWNLOAD THESE INSTEAD OF FETCHING THEM
+print '''        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <link rel="stylesheet" href="../index.css">
+        <script src="../index.js"></script>'''
+print "    </head>"
 
+print "    <body>"
+print "        <h1>Enter parameters for the particle reaction</h1>"
+
+#If A form has been submitted - this not is the first time the page is being loaded
 if len(form) != 0:
+    #Write the Mathematica configuration file
+    configFile = open('image.cfg','w+')
+    configFile.write("#Version %s\n"%VERSION)
+    configFile.write(time.strftime("#%X %x\n"))
+
+    #Also update input elements based on previous form submission and generate signature for this request
+    info = ""
     for box in boxes:
         box.checkState(form)
+        #configFile.write("%s = %s ! %s\n"%(box.getState(),box.name,box.label))
+        #info += str(box.getState())
     for rad in radios:
         rad.checkState(form)
+        configFile.write("%s = %s ! %s\n"%(rad.labels[rad.getState()],rad.name,rad.name))
+        info += str(rad.getState())
     for t in texts:
         t.checkState(form)
+        configFile.write("%s = %s ! %s\n"%(t.getState(),t.name,t.label))
+        info += str(t.getState())
+    newSignature = ''.join([str(ord(i)) for i in info])
+    configFile.write("%s = exptid ! experimental ID\n"%newSignature)
 
-    configDump = {}
-    configDump['checkboxes'] = [box.getState() for box in boxes]
-    configDump['radiobuttons'] = [rad.getState() for rad in radios]
-    configDump['textinputs'] = [t.getState() for t in texts]
-
-    configFile = open('image.cfg','w+')
-    pickle.dump(configDump,configFile)
     configFile.close()
 
-    #Check for the presence of the lockfile
-    #if glob.glob("lockfile") == []:
-    os.system("./script.py&")
-    print "<img id='graph' src='../loading.png'/>"
-    print '''<script>function UrlExists(url)
-    {
-    var http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
-    http.send();
-    return http.status!=404;
-    }
-    var loop = setInterval(function(){ if (UrlExists('../graph.png')) {clearInterval(loop);document.getElementById('graph').src = '../graph.png';}; }, 1000);</script>'''
-else:
-    print "<img id='graph' src='../first.png'/>"
+    #Check if the graph being requested has already been generated and stored
 
-print '<form action="index.cgi" method="get">'
-print '<table border=1px><tr>'
-print '<td>'
-for box in boxes:
-    box.draw()
-print '</td><td>'
-for rad in radios:
-    rad.draw()
-print '</td><td>'
-for t in texts:
-    t.draw()
-print '</td></tr></table>'
+    #Check if the image is there
+    if len(glob.glob("images/"+newSignature+".jpg")) != 0:
+        #If it is, display it
+        print "<img id='graph' src='../images/"+newSignature+".jpg'/>"
+
+    else:
+        #Check for the presence of the lockfile. If it is not there...
+        present = glob.glob("lockfile")
+        if len(present) == 0:
+            #Run the program
+            makeGraph()
+        else:
+            #Read the signature of the lockfile
+            lockfile = file('lockfile','r')
+            signature = lockfile.readline()[:-1]
+            lockfile.close()
+
+            #See if an image with a corresponding signature already exists, and if it does, delete the lockfile and generate the new graph
+            if len(glob.glob("images/"+signature+".jpg")) != 0:
+                os.system('rm lockfile')
+                makeGraph()
+            else:
+                #If not, wait until the image with the same signature has been generated, then reload the page
+                print "        <img id='graph' src='../busy.png'/>"
+                print '''        <script>var loop = setInterval(function() { if (UrlExists("../images/%s.jpg")) { clearInterval(loop); location.reload();} }, 3000);</script>'''%(signature)
+else:
+    print "        <img id='graph' src='../first.png'/>"
+
+#Generate the actual HTML form and draw all the input elements
+print '        <form action="index.cgi" method="get">'
+
 for b in buttons:
     b.draw()
 
-print '</form>'
+print '            <table>'
+print '                <tr>'
+print '                    <td>'
+print 'Method used to generate PDFset:<br/>'
+radios[0].draw()
+print '                    </td>'
+print '                    <td>'
+boxes[0].draw()
+print '                    </td>'
+print '                </tr>'
+print '            </table>'
 
-print "</body>"
-print "</html>"
+if not boxes[0].getState():
+    print '            <table id="level2" class="fadeOut">'
+else:
+    print '            <table id="level2" class="fadeIn">'
+print '                <tr>'
+print '                    <td>'
+print 'The second beam consists of:<br/>'
+radios[1].draw()
+print '                    </td>'
+print '                    <td>'
+print "something else"
+print '                    </td>'
+print '                </tr>'
+print '            </table>'
+
+print '        </form>'
+
+print '    </body>'
+print '</html>'

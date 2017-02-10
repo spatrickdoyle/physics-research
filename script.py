@@ -1,18 +1,13 @@
 #!/usr/bin/env python2
 
-import cPickle as pickle
-import os,time
-
-#file("lockfile","w+")
+import time
 
 configFile = file("image.cfg","r")
-data = pickle.load(configFile)
+signature = configFile.readlines()[-1][:-28]
 configFile.close()
 
 time.sleep(4)
 
-imageFile = file('graph.png','w+')
-imageFile.write(str(data))
+imageFile = file('images/'+signature+'.jpg','w+')
+imageFile.write(str(signature))
 imageFile.close()
-
-#os.remove("lockfile")
