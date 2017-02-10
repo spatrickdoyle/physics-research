@@ -5,8 +5,6 @@
 #Make the form update dynamically while parameters are being entered
 #Make button for resetting parameters
 #Make back button
-#Change stylesheet links to fetch Google MDL resources locally
-#Make script generate better images
 #Test with AWS
 #Remove CGI debugging stuff
 #Make form POST, not GET
@@ -60,12 +58,16 @@ print "<html>"
 print "    <head>"
 print "        <title>Physics test page</title>"
 
-#Links to Google Material Design stylesheets - DOWNLOAD THESE INSTEAD OF FETCHING THEM
-print '''        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-        <link rel="stylesheet" href="../index.css">
+#Google Material Design stylesheets
+print '''        <link rel="stylesheet" href="../mdl/material.min.css">
+        <script src="../mdl/material.min.js"></script>
+        <link rel="stylesheet" href="../mdl/icon.css">'''
+
+#Other resources
+print '''        <link rel="stylesheet" href="../index.css">
         <script src="../index.js"></script>'''
+
+
 print "    </head>"
 
 print "    <body>"
