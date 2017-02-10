@@ -38,7 +38,7 @@ def makeGraph():
     os.system("./script.py&")
 
     #Check every 2 seconds to see if the graph is done being generated, and display it when it is
-    print "        <img id='graph' src='../loading.png'/>"
+    print "        <img id='graph' src='../loading.jpg'/>"
     print '''        <script>var loop = setInterval(function() { if (UrlExists("../images/%s.jpg")) { clearInterval(loop); document.getElementById('graph').src = "../images/%s.jpg"; }; }, 2000);</script>'''%(newSignature,newSignature)
 
 
@@ -122,10 +122,10 @@ if len(form) != 0:
                 makeGraph()
             else:
                 #If not, wait until the image with the same signature has been generated, then reload the page
-                print "        <img id='graph' src='../busy.png'/>"
+                print "        <img id='graph' src='../busy.jpg'/>"
                 print '''        <script>var loop = setInterval(function() { if (UrlExists("../images/%s.jpg")) { clearInterval(loop); location.reload();} }, 3000);</script>'''%(signature)
 else:
-    print "        <img id='graph' src='../first.png'/>"
+    print "        <img id='graph' src='../first.jpg'/>"
 
 #Generate the actual HTML form and draw all the input elements
 print '        <form action="index.cgi" method="get">'
