@@ -13,7 +13,7 @@ class CheckBox:
             self.onUse = ""
 
     def draw(self):
-        print '<label class="mdl-checkbox mdl-js-checkbox" for="'+self.name+'">'
+        print '<label style="display:inline" class="mdl-checkbox mdl-js-checkbox" for="'+self.name+'">'
         print '<input type="checkbox" id="'+self.name+'" name="'+self.name+'" class="mdl-checkbox__input"'+self.state+self.onUse+'>'
         print '<span class="mdl-checkbox__label">'+self.label+'</span>'
         print '</label>'
@@ -62,18 +62,25 @@ class RadioBox:
         return self.states.index(" checked")
 
 class Text:
-    def __init__(self,name,label,default=None):
+    def __init__(self,name,label,numbers,default=None):
         self.name = name
         self.label = label
+        if numbers:
+            self.numbers = 'pattern="-?[0-9]*(\.[0-9]+)?" '
+        else:
+            self.numbers = ''
         self.default = default
         if default == None:
             self.state = ""
         else:
-            self.state = ' value="'+default+'"'
+            if numbers:
+                self.state = ' value="%f"'%default
+            else:
+                self.state = ' value="'+default+'"'
 
     def draw(self):
         print '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">'
-        print '<input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="'+self.name+'" id="'+self.name+'"'+self.state+'>'
+        print '<input class="mdl-textfield__input" type="text" '+self.numbers+'name="'+self.name+'" id="'+self.name+'"'+self.state+'>'
         print '<label class="mdl-textfield__label" for="'+self.name+'">'+self.label+'</label>'
         print '<span class="mdl-textfield__error">Enter a number</span>'
         print '</div>'
@@ -91,11 +98,15 @@ class Text:
         return self.state[8:-1]
 
 class Button:
-    def __init__(self,name,label):
+    def __init__(self,name,label,idd=None):
         self.name = name
         self.label = label
+        if idd == None:
+            self.idd = ""
+        else:
+            self.idd = idd
 
     def draw(self):
-        print '<button id="button" class="mdl-button mdl-js-button mdl-button--raised">'
+        print '<button class="mdl-button mdl-js-button mdl-button--raised"'+' id="'+self.idd+'">'
         print self.label
         print '</button>'

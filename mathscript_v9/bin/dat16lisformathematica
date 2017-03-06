@@ -1,0 +1,126 @@
+List of experiments, format 07/2012, 2016/11/01: delete some parts for satisfy the function:"ReadLisFile" in dtaplot_2008_botingw.nb   
+id1    nmdt        jsfn     kbsn      ktgt      kbem  #Corr-
+  id2              jXsc     jCmpt     jHdn      jbem   SysErr
+ 1 01 BcdF2pCor     2         1         1         0    5  x   C6
+ 1 02 BcdF2dCor     2         1         2         0    5  x   C6
+ 1 03 NmcF2pCor     2         1         1         0   11  x   C6
+ 1 04 NmcRatCor     2         1        12         0    5  x   C6
+ 1 05 NmcF2rX       2         1        12         0    0
+ 1 06 NmcX0pCor    23         1         1         2   11  x   C6
+ 1 15 BcdX0pCor    26         1         1         2    5  x   C6
+ 1 16 BcdX0dCor    26         1         2         0    5  x   C6
+ 0 00 ==========    0         0         0         0      =======
+ 1 08 cdhswf2       2         0         5         0    0  x       P Berge et al Z Phys C49 187 (1991)
+ 1 09 cdhswf3       3        -1         5         0    0  x       P Berge et al Z Phys C49 187 (1991)
+ 1 10 ccfrf2.mi     2         0         5         0    5  x   C6- Yang&Bodek model-independent
+ 1 11 ccfrf3.md     3        -1         5         0    0  x   C6- Shaevitz&Seligman model-dependent processed by SK
+ 1 22 ChorusNuX0   20         2         5         1    13         Chorus neutrino Xsection
+ 1 23 ChorusNbX0   20         3         5        -1    13         Chorus anti-neutrino Xsection
+ 1 24 NuTvNuChXN   30         2         5         1    0          NuTev Neutrino Dimuon Reduced xSec--corrected for NLO acceptance
+ 1 25 NuTvNbChXN   30         3         5        -1    0          NuTev Neutrino Dimuon Reduced xSec--corrected for NLO acceptance
+ 1 26 CcfrNuChXN   30         2         5         1    0          Ccfr Neutrino Dimuon Reduced xSec--corrected for NLO acceptance
+ 1 27 CcfrNbChXN   30         3         5         1    0          Ccfr Neutrino Dimuon Reduced xSec--corrected for NLO acceptance
+ 0 00 ==========    0         0         0         0      =======
+ 1 40 Hn+9697f2c   12         1         1         0    0  nc  C6H
+ 1 43 Hn+9900x0c   30         1         1        -2    8  nc       (same measurement as above)
+ 1 45 Hn+9900x0b   30         1         1        -2    8  nb       (same measurement as above)
+ 1 46 Hn0407f2c    12         1         1         0    0  nc   F2c extracted from D* meson distrib., H1 2004-2007
+ 1 47 Hn1X0c       30         1         1        -2   45  nc  Charm NC DIS red. xsec, comb. HERA-1 data
+ 0 00 ==========    0         0         0         0      =======
+ 1 56 Zn+9697f2c   12         1         1         0    0  nc  C6H
+ 1 57 Zn+9800f2c   12         1         1         0    0  nc
+ 1 59 HERA1X0      25       235         1         0    114         Combined HERA1 NC+CC DIS (2009)
+ 1 60 HERAIpII      25       235         1         0   169         Combined HERA1 NC+CC DIS (2015)
+ 0 00 ==========    0         0         0         0      =======
+ 1 64 e140Rd        4         1         2         0    0  x   C6   SLAC E-140, DIS ratio R on deuterium
+ 1 65 e143RC        4         1         4         0    0  x   C6   SLAC E-143, DIS ratio R on carbon
+ 1 66 H1FL00        0         1         1         0    0  x   C6   H1 DIS longitudinal structure function, 2000
+ 1 67 H1FL03a       0         1         1         0    0  x   C6   H1 DIS longitudinal structure function, 2003a
+ 1 68 H1FL03b       0         1         1         0    0  x   C6   H1 DIS longitudinal structure function, 2003b
+ 1 69 H1FL10        0         1         1         0    0  x   C6   H1 DIS longitudinal structure function, 2010
+ 1 70 TestFL        0         1         1         0    0  x   C6   Fake DIS longitudinal structure function, 2013
+ 1 80 epFLbench     0         2         1         0    5  x   C6
+ 1 81 epF1bench     1         2         1         0    5  x   C6
+ 1 82 epF2bench     2         2         1         0    5  x   C6
+ 1 83 epF3bench     3         2         1         0    5  x   C6
+ 1 84 emFLbench     0         3         1         0    5  x   C6
+ 1 85 emF1bench     1         3         1         0    5  x   C6
+ 1 86 emF2bench     2         3         1         0    5  x   C6
+ 1 87 emF3bench     3         3         1         0    5  x   C6
+ 0 00 ==========    0         0         0         0      =======
+ 2 01 e605          2         1         3         1    0  x   C6  DY  Q^3 dSig/dQ dy proton on heavy target
+ 2 03 e866f         4         1         1         1    0  x   C6  pd / 2pp
+ 2 04 e866ppxf      1         1         1         1    0  x   C6  DY pp: Q^3 dSig/dQ dxf
+ 2 05 e866pdxf      1         1         2         1    0  x   C6  DY pp: Q^3 dSig/dQ dxf
+ 2 21 cdfWprod     -1         2         1        -1    0          W production total X-sec.
+ 2 25 cdfLasy      -3         3         1        -1    0  x   C6  W production: decay lepton asymmetry CDF Run-1
+ 2 27 cdfLasy2     -3         3         1        -1    0  x   C6  W production: decay lepton asymmetry CDF Run-2 
+ 2 31 d02Easy1     -3         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 Pt>25
+ 2 32 d02Easy2     -3         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 25<Pt<30
+ 2 33 d02Easy3     -3         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 Pt>35
+ 2 34 d02Masy1     -3         3         1        -1    0  x   C6  W production: decay muon asymmetry D0 Run-2 Pt>20
+ 2 35 d02Masy2     -3         3         1        -1    0  x   C6  W production: decay muon asymmetry D0 Run-2 20<Pt<35
+ 2 36 d02Masy3     -3         3         1        -1    0  x   C6  W production: decay muon asymmetry D0 Run-2 Pt>35
+ 2 40 LHCb7_WZ1    -9        243        1         1    0  x   C6  W/Z forward rapidity xsecs, LHCb 7 TeV
+ 2 41 LHCb7Wasy1   -9         23        1         1    0  x   C6  W/Z forward rapidity W asy, LHCb 7 TeV, pT > 20 GeV
+ 2 42 LHCb7Wasy2   -9         23        1         1    0  x   C6  W/Z forward rapidity W asy, LHCb 7 TeV, pT>25 GeV
+ 2 43 LHCb7Wasy3   -9         23        1         1    0  x   C6  W/Z forward rapidity W asy, LHCb 7 TeV, pT>30 GeV
+ 2 44 LHCb7Wa1N    -3         3         1         1    0  x   C6  W/Z forward rapidity W asy, LHCb 7 TeV, pT > 20 GeV
+ 2 60 ZyD02a       -6         4         1        -1    6          Z rapidity dist. (D0 TeV II-a)
+ 2 61 ZyCDF2       -6         4         1        -1    6          Z rapidity dist. (CDF TeV II)
+ 2 65 CMS7Masy1    -9         3         1         1    0  x   C6  muon W asy, CMS7-4.7 1/fb, Pt> 25 GeV
+ 2 66 CMS7Masy2    -9         3         1         1    0  x   C6  muon W asy, CMS7-4.7 1/fb, Pt> 35 GeV
+ 2 67 CMS7Easy     -3         3         1         1    0  x   C6  electron W asy, CMS7-840 1/pb, Pt> 35 GeV
+ 2 68 ATL7_WZ      -9       243         1         1    0  x   C6  Combined W/Z cross sections and W asym, ATLAS 7 TeV
+ 2 75 ATL7DYhm     -2        14         1         1    9  x   C6  ATLAS 7 TeV high-mass DY 
+ 2 76 ATL7DYlm     -2        14         1         1    16 x   C6  ATLAS 7 TeV low-mass DY 
+ 2 77 ATL7DYext    -2        14         1         1    10 x   C6  ATLAS 7 TeV extended low-mass DY 
+ 2 81 d02Easy5     -9         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 for electron Et>25 GeV and neutrino Etmiss>25 GeV
+ 2 83 d02EasyI     -9         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 for electron 25<Et<35 GeV and neutrino Etmiss>25 GeV
+ 2 84 d02EasyII    -9         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 for electron 25<Et<35 GeV and neutrino 25<Etmiss<35 GeV
+ 2 85 d02EasyIII   -9         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 for electron Et>35 GeV and neutrino Etmiss>25 GeV
+ 2 86 d02EasyIV    -9         3         1        -1    0  x   C6  W production: decay elec asymmetry D0 Run-2 for electron Et>35 GeV and neutrino Etmiss>35 GeV
+ 2 99 ATL13_WZ     -9       243         1         1    0  x   C6  pseudo data for W/Z cross sections and W asym, ATLAS 13 TeV
+ 0 00 ==========    0         0         0         0      ===========
+ 4 01 ttbTeV2       0         0         1        -1    0      Tevatron Run2 t-tbar Xsec
+ 4 02 ttbLHC7       0         0         1         1    0      LHC 7 TeV t-tbar Xsec
+ 4 03 ttbLHC8       0         0         1         1    0      LHC 8 TeV t-tbar Xsec
+ 4 04 ttbLHC14      0         0         1         1    0      pseudo data for LHC 14 TeV t-tbar Xsec
+ 4 05 ttbLHC13      0         0         1         1    0      LHC 13 TeV t-tbar Xsec
+ 0 00 ==========    0         0         0         0      ===========
+ 5 04 cdf2jtCor2    6         0         1        -1    24         (run II: exp cor.err; ptmin & ptmax)
+ 5 05 cdf1jtCorB    6         0         1        -1    8          (runIb:98; cor.err); like cdf1jtCor but gives ptmin, ptmax -- Rsep
+ 5 06 cdf1jtCorB    6         0         1        -1    8          (runIb:98; cor.err); like cdf1jtCor but gives ptmin, ptmax -- Midp 
+ 5 14 d02jtCor2     6         0         1        -1    23         (run II: cor.err; ptmin & ptmax)
+ 5 15 d01Bjet       6         0         1        -1    m  x   C6  (runIb90; 5 eta bins) like d0jetR1 but gives ptmin,ptmax -- use Rsep
+ 5 17 d01Bjet       6         0         1        -1    m  x   C6  (runIb90; 5 eta bins) like d0jetR1 but gives ptmin,ptmax -- use Midp
+ 5 18 d02dijet      -1        0         1        -1    70     (D0-Run 2 dijet inv. mass)
+ 5 34 ATL7jtR4      6         0         1         1    88         (ATLAS single inclusive jet data with R=0.4)
+ 5 35 ATL7jtR6      6         0         1         1    88         (ATLAS single inclusive jet data with R=0.6)
+ 5 36 ATL7dijtR4    6         0         1         1    87         (ATLAS dijet data with R=0.4)
+ 5 37 ATL7dijtR6    6         0         1         1    87         (ATLAS dijet data with R=0.6)
+ 5 38 CMS7jtR7      6         0         1         1    88         (CMS single inclusive jet data with R=0.7)
+ 5 51 ATLratR4      6         0         1         1    88         (ATLAS single inclusive jet ratio[p_T] 2.76/7 with R=0.4)
+ 5 52 ATLratR6      6         0         1         1    88         (ATLAS single inclusive jet ratio[p_T] 2.76/7 with R=0.6)
+ 0 00 ==========    0         0         0         0      ===========  Pt-distribution data
+ 6 01 ptE288        3         1       604         1    0
+ 6 02 ptE605        3         1      3529         1    0
+ 6 03 ptCDFz1       2         4        -1         1    0
+ 6 04 ptD0z1        2         4        -1         1    0
+ 6 05 ptR209        4         1         1         1    0
+ 6 06 ptD0z2        2         4        -1         1    0
+ 6 07 ptCDFz2       2         4        -1         1    0
+ 0 00 ==========    0         0         0         0      =======
+ 7 01 fkH0a7        0         5         1         1    0      Fake H0 total cross section at LHC-7
+ 7 02 fkH0a8        0         5         1         1    0      Fake H0 total cross section at LHC-8
+ 7 03 fkH0a14       0         5         1         1    0      Fake H0 total cross section at LHC-14
+ 7 04 fkWp          0         3         1         1    0      Fake W+ total cross section at LHC 
+ 7 05 fkWm          0         2         1         1    0      Fake W- total cross section at LHC
+ 7 06 fkZ0          0         4         1         1    0      Fake Z0 total cross section at LHC
+ 7 07 fkH0a13       0         5         1         1    0      Fake H0 total cross section at LHC-13 
+ 7 08 fkZ0pr        0         4         1         1    0      Fake Zprime total cross section at LHC
+ 7 09 fkWppr        0         3         1         1    0      Fake W+prime total cross section at LHC
+ 7 10 fkWmpr        0         2         1         1    0      Fake W-prime total cross section at LHC
+ 0 00 ==========    0         0         0         0      ==== let id2 > 90 be test and fake data files===
+
+

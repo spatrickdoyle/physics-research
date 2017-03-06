@@ -1,0 +1,95 @@
+body {
+	background-color: rgb(245, 255, 245);
+	color: rgb(10, 20, 0);
+	/*font-family: "Lucida Console", Monaco, monospace;*/
+}
+
+A:link, A:visited {
+	text-decoration: none;
+	color: rgb(40,110,0);
+	font-weight: bold;
+}
+
+A:active {
+	text-decoration: none;
+	color: rgb(0,70,0);
+	font-weight: bold;
+}
+
+h1 {
+	color: rgb(255,255,255);
+	background-color: rgb(50,120,0);
+	/*font-family: Verdana, Helvetica, Geneva, Arial, sans-serif;*/
+	font-size: 28px;
+	margin-top: 15px;
+	margin-bottom:0px;
+	/*width: 960px;*/
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+h2 {
+	color: rgb(50, 120, 0);
+	background-color: rgb(200, 240, 200);
+	/*font-family: Verdana, Helvetica, Geneva, Arial, sans-serif;*/
+	/*font-size: 20px;
+	margin-top: 0px;
+	margin-bottom:0px;
+	width: 960px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;*/
+}
+
+h2.nocolor {
+	color: rgb(0, 40, 0);
+	background-color: rgb(245, 255, 245);
+	/*font-family: Verdana, Helvetica, Geneva, Arial, sans-serif;*/
+	font-size: 20px;
+	margin-top: 0px;
+	margin-bottom:0px;
+	/*width: 960px;*/
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+h3 {
+	color: rgb(0,40,0);
+	/*font-family: Verdana, Helvetica, Geneva, Arial, sans-serif;*/
+	font-size: 16px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/*width: 900px;*/
+}
+
+h3.short {
+	color: rgb(0,40,0);
+	/*font-family: Verdana, Helvetica, Geneva, Arial, sans-serif;*/
+	font-size: 16px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	/*width: 700px;*/
+}
+
+LI {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: 600px;
+}
+
+li.title {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+img.greenball {
+	width: 7px;
+	height: 7px;
+	margin-left: 3px;
+	margin-right: 3px;
+}

@@ -1,0 +1,25 @@
+#this file is config file of correlation_plot_project_v3.nb
+#arguments:
+#runfunc decides the function user want to run: runfun = save_fx, save_corr_plots 
+#figureDir is the directory of figure files 
+#PDFsetDir is the directory of PDFset, PDFsetmethod = Hessian or MC 
+#PDFDataDir is directory store f(x,Q) data, PDFname is name of PDFset, ex: CT14NNLO 
+#datalistFile is the file with experimental information 
+#expttype & exptid are used to decide which experiments you want to show  
+
+quick_save_plot = runfunc ! the action you want to do, what you can do: save_fx, save_corr_plots, quick_save_plot
+
+. = figureDirtag ! the directory used to save figure files
+
+/home/botingw/code/pdf_correlation/dta_file/CT14NNLO/ = PDFsetDir !  PDFset directory 
+Hessian = PDFsetmethod !  method used to generate PDFset 
+
+/home/botingw/code/pdf_correlation/data/sameptcorr/pdfxQnew/ = PDFDataDir !  directory storing f(x,Q) data 
+CT14NNLO = PDFname !  PDFname of file storing f(x,Q) value 
+
+./dat16lisformathematica = datalist !  datalist with experimental information 
+
+single = expttype !  expt type mode: single, multi, All, ProtonNeutron are available options 
+
+504 = exptid !  experimental ID 
+

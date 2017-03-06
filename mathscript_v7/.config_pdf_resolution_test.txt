@@ -1,0 +1,5 @@
+#Version 0.0
+#13:10:44 03/01/17
+quick_save_plot = runfunc ! runfunc
+single = expttype ! expttype
+CT14NNLO = PDFname !  PDFname of file storing f(x,Q) value../output/ = figureDirtag ! the directory used to save figure files4848 = exptid ! experimental ID
