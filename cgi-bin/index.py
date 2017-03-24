@@ -414,87 +414,94 @@ print TAB(3)+'<table>'
 print TAB(4)+'<tr>'
 print TAB(5)+'<td>'
 
-print 'Figures to plot:<br/><br/>'
-print '<table>'
-print '<tr>'
+print TAB(6)+'Figures to plot:<br/><br/>\n'
+print TAB(6)+'<table>'
+
+print TAB(7)+'<tr>'
 for box in boxes[112:118]:
-    print '<td style="width: 30%">'
-    box.draw(6)
-    print '</td>'
-print '</tr>'
+    print TAB(8)+'<td style="width: 30%">'
+    box.draw(9)
+    print TAB(8)+'</td>'
+print TAB(7)+'</tr>\n'
 
-print '<tr>'
-print '<td></td>'
+print TAB(7)+'<tr>'
+print TAB(8)+'<td></td>'
 for s in selects[0:5]:
-    print '<td>'
-    print 'Highlight mode:<br/>'
-    s.draw(5)
-    print '</td>'
-print '</tr>'
+    print TAB(8)+'<td>'
+    print TAB(9)+'Highlight mode:<br/>'
+    s.draw(9)
+    print TAB(8)+'</td>'
+print TAB(7)+'</tr>\n'
 
-print '<tr>'
-print '<td></td>'
+print TAB(7)+'<tr>'
+print TAB(8)+'<td></td>'
 for t in range(5):
-    print '<td>'
-    print 'Input range of values:<br/>'
-    texts[4*t].draw(5)
-    print '<br/>'
-    texts[4*t +1].draw(5)
+    print TAB(8)+'<td>'
+    print TAB(9)+'Input range of values:<br/>'
+    texts[4*t].draw(9)
+    print TAB(9)+'<br/>'
+    texts[4*t +1].draw(9)
 
-    print '<br/>'
-    print '<br/>'
+    print TAB(9)+'<br/><br/>'
 
-    print 'Input range of percentages:<br/>'
-    texts[4*t +2].draw(5)
-    print '<br/>'
-    texts[4*t +3].draw(5)
-    print '</td>'
-print '</tr>'
+    print TAB(9)+'Input range of percentages:<br/>'
+    texts[4*t +2].draw(9)
+    print TAB(9)+'<br/>'
+    texts[4*t +3].draw(9)
+    print TAB(8)+'</td>'
+print TAB(7)+'</tr>'
 
-print '</table>'
-print '</table>'
+print TAB(6)+'</table>'
+print TAB(5)+'</td>'
+print TAB(4)+'</tr>'
+print TAB(3)+'</table>\n'
+
+print TAB(3)+'<table>'
+
+print TAB(4)+'<tr>'
+print TAB(5)+'<td>'
+print TAB(6)+'Functions to use in correlations:<br/><br/>\n'
+print TAB(6)+'<table>'
+print TAB(7)+'<tr>'
+
+for box in boxes[118:133]:
+    print TAB(8)+'<td>'
+    box.draw(9)
+    print TAB(9)+'<br/>'
+    print TAB(8)+'</td>'
+
+print TAB(7)+'</tr>'
+print TAB(6)+'</table>\n'
+
+print TAB(6)+'<table>'
+print TAB(7)+'<tr>'
+print TAB(8)+'<td>'
+texts[20].draw(9)
+print TAB(9)+'<br/><br/>'
+texts[21].draw(9)
+print TAB(8)+'</td>'
+print TAB(7)+'</tr>'
+print TAB(6)+'</table>\n'
+
+print TAB(5)+'</td>'
+print TAB(4)+'</tr>'
+print TAB(3)+'</table>\n'
 
 print TAB(3)+'<table>'
 print TAB(4)+'<tr>'
-print TAB(5)+'<td>'
-
-print 'Functions to use in correlations:<br/><br/>'
-print '<table>'
-print '<tr>'
-
-for box in boxes[118:133]:
-    print '<td>'
-    box.draw(5)
-    print '<br/>'
-    print '</td>'
-
-print '</tr>'
-print '</table>'
-
-print '<table>'
-print '<tr><td>'
-texts[20].draw(5)
-print '<br/><br/>'
-texts[21].draw(5)
-print '</td><tr/>'
-print '</table>'
-print '</table>'
-
-print '<table>'
-print '<tr>'
 
 for t in range(22,30)[::2]:
-    print '<td>'
-    boxes[122+(t/2)].draw(5)
-    print '<br/><br/>'
-    texts[t].draw(5)
-    print '<br/><br/>'
-    texts[t+1].draw(5)
-    print '<br/>'
-    print '</td>'
+    print TAB(5)+'<td>'
+    boxes[122+(t/2)].draw(6)
+    print TAB(6)+'<br/><br/>'
+    texts[t].draw(6)
+    print TAB(6)+'<br/><br/>'
+    texts[t+1].draw(6)
+    print TAB(6)+'<br/>'
+    print TAB(5)+'</td>'
 
-print '</tr>'
-print '</table>'
+print TAB(4)+'</tr>'
+print TAB(3)+'</table>'
 
 '''if not boxes[0].getState():
     print '            <table id="level2" class="fadeOut">'
