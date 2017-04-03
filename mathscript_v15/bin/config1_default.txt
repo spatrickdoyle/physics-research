@@ -1,0 +1,64 @@
+#Comment Sample configuration file for the online plotter of CT14 data
+#Comment 2
+#Comment 3
+#Comment 4
+
+#job id is the index of jobs submitted by web users 
+Job ID (copy from the counter file): 457
+#PDF set read the PDF set for making correlation plots
+PDF set: CT14NNLO
+
+# Figures to plot (Bo Ting, describe what each figure means)
+# 1: data plots, 2: expt error, 3: residue, 4: "residue error" deltaR_i, 5: "sensitivity factor" deltaR_i*Corr( r_i, F), 6: "correlation" Corr( r_i, F)
+#flag = 1, true; = 0, false 
+Type:  1     2     3     4     5     6     7
+Flag:  1     1     1     1     1     1     1
+
+# Experiments to include (Bo Ting, write the names for each experiment)
+#flag = 1, true; = 0, false 
+Expt. ID:   701   702   703   159   101   102   103   104   106   108   109   110   111   124   125   126   127   147   201   203   204   225   227   231   234   260   261   504   514   145   169   267   268   535   240   241   281   265   266   538
+Expt. Flag:  0     0     0     0     0     0     0     0     0     0     0     1     0     0     1     0     0     0     1     0     0     1     0     1     0     0     0     1     0     0     0     0     0     0     0     0     0     0     0     0  
+
+
+#Functions to use in correlations (Bo Ting, describe what functions mean)
+# function(F): parton density function of flavour from index -5 ~ 5(u,d,s,c,b and their anti-quark ub,db,... and gluon g), 
+#adding flavour = 6, 7, 8 defined as db/ub, d/u, (s + sb)/(ub + db)
+# user means user defined function for correlation, if user define is on, user could input function's label and Nset numbers, 
+#where Nset is # of family member of PDFset
+#flag = 1, true; = 0, false 
+Type:  bb   cb   sb     db    ub     g     u     d     s     c     b	q6   q7    q8   user
+Flag:  0     0    0     0     0      1     1     1     0     0     1    0    1     0     0
+
+#User function parameters (provided through two 'paragraph' web forms)
+Name: sigma_Higgs (pb)
+Values: 0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   
+
+#x-Q figure parameters (input lines)
+#options can be auto
+xmin,   xmax:  0.0001   1
+mumin, mumax:      1.0 500
+
+#Histogram figure parameters (input lines)
+#options can be auto 
+Number of bins: 20
+xmin, xmax: auto  auto
+ymin, ymax:  0 auto
+
+#in plots
+#show color by percentage of data (# of percentage for input is 3)
+Color by data percentage: 50 70 85 
+
+#data point size: tiny small medium large
+Size: small 
+
+#for plot type 2(expt error)... to 6("correlation"), choose the way to show plots by highlight mode
+#highlight mode, for every plot type, user could choose mode 0, 1, 2 to highlight data in the plot by enlarge point size
+#mode 0: No highlight. mode 1: highlight data by range of value. mode 2: highlight data by range of percentage
+Type:  1     2     3     4     5     6     7
+Mode:  0     2     0     1     1     1     1
+Mode 1 range: 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75 0.3  0.4 0.45  0.75
+Mode 2 range: 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55
+ 
+
+
+

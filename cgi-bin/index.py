@@ -25,7 +25,7 @@ cgitb.enable()
 #Other things
 import glob,os,time
 
-VERSION = '14' #Version of the Mathematica script
+VERSION = '15' #Version of the Mathematica script
 ASSETS = '../../assets/' #Path to HTML page assets
 MATH = './' #Path to Mathematica script bin
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
@@ -45,7 +45,7 @@ def TAB(num):
 
     return ('    '*num)
 
-def makeConfig(boxes,radios,texts):
+def makeConfig(boxes,radios,texts,selects):
     '''makeConfig(List boxes, List radios, List texts)
     boxes: list of mdl CheckBox elements
     radios: list of mdl RadioBox elements
@@ -71,44 +71,70 @@ def makeConfig(boxes,radios,texts):
 
     jobID = boxStr+radStr+textStr
 
-    #Write the job ID
+    #Job ID
     configFile.write("Job ID (copy from the counter file): %s\n"%jobID)
 
-    #Write PDF set (should always be the same)
+    #PDF set
     configFile.write("PDF set: CT14NNLO\n\n")
 
     #Generate the sections for figure to plot, experiments to include, and functions to use
     typestr = ""
     flagstr = ""
     funcstr = ""
-    for box in range(len(boxes)):
-        if box < 7:
-            typestr += "     %d"%boxes[box].getState()
-        elif (box >= 7) and (box < 47):
-            flagstr += "     %d"%boxes[box].getState()
-        elif box >= 47:
-            funcstr += "%d     "%boxes[box].getState()
+    for box in boxes[111:117]:
+        typestr += "     %d"%box.getState()
+    for box in boxes[0:111]:
+        flagstr += "     %d"%box.getState()
+    for box in boxes[117:132]:
+        funcstr += "%d     "%box.getState()
+
+    #Type
     configFile.write("Type:  1     2     3     4     5     6     7\n")
-    configFile.write("Flag:%s\n\n"%(typestr[3:]))
+    #Flag
+    configFile.write("Flag:%s0\n\n"%(typestr[3:]))
+
+    #Expt. ID
     configFile.write("Expt. ID:   701   702   703   159   101   102   103   104   106   108   109   110   111   124   125   126   127   147   201   203   204   225   227   231   234   260   261   504   514   145   169   267   268   535   240   241   281   265   266   538\n")
+    #Expt. Flag
     configFile.write("Expt. Flag:%s\n\n"%(flagstr[3:]))
 
+    #Type
     configFile.write("Type:  bb   cb   sb     db    ub     g     u     d     s     c     b   user\n")
-    configFile.write("Flag:  %s0\n\n"%funcstr)
+    #Flag
+    configFile.write("Flag:  %s\n\n"%funcstr)
 
-    configFile.write("""Name: sigma_Higgs (pb)
-Values: 0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \n\n""")
+    #Name
+    configFile.write("Name: %s"%texts[20])
+    #Values
+    configFile.write("Values: %s\n\n"%texts[21])
 
     bounds = []
-    for t in texts:
+    for t in texts[22:29]:
+        print t.getState()
         bounds.append(float(t.getState()))
+
+    for i in range(133,137):
+        if boxes[i].getState():
+            bounds[i-133] = 'auto'
 
     configFile.write("xmin,   xmax:  %f   %f\n"%(bounds[0],bounds[1]))
     configFile.write("mumin, mumax:      %f %f\n\n"%(bounds[2],bounds[3]))
 
-    configFile.write("Number of bins: auto\n")
-    configFile.write("xmin, xmax: %f  %f\n"%(bounds[4],bounds[5]))
-    configFile.write("ymin, ymax:  %f %f\n"%(bounds[6],bounds[7]))
+    configFile.write("Number of bins: %f\n")%bounds[4]
+    configFile.write("xmin, xmax: %f  %f\n"%(bounds[5],bounds[6]))
+    configFile.write("ymin, ymax:  0 auto\n")
+
+    configFile.write("Color by data percentage: 50 70 85")
+
+    configFile.write("Size: %s"%(radios[1].getState()))
+
+    configFile.write("Type:  1     2     3     4     5     6     7")
+    configFile.write("Mode:  0     %d     %d     %d     %d     %d     0"%(selects[0].getState(),selects[1].getState(),selects[2].getState(),selects[3].getState(),selects[4].getState()))
+
+    vals = [float(texts[0].getState()),float(texts[1].getState()),float(texts[4].getState()),float(texts[5].getState()),float(texts[8].getState()),float(texts[9].getState()),float(texts[12].getState()),float(texts[13].getState()),float(texts[16].getState()),float(texts[17].getState())]
+    percs = [float(texts[2].getState()),float(texts[3].getState()),float(texts[6].getState()),float(texts[7].getState()),float(texts[10].getState()),float(texts[11].getState()),float(texts[14].getState()),float(texts[15].getState()),float(texts[18].getState()),float(texts[19].getState())]
+    configFile.write("Mode 1 range: 0.0  0.0 %f  %f %f  %f %f  %f %f  %f %f  %f 0.0  0.0"%(vals[0],vals[1],vals[2],vals[3],vals[4],vals[5],vals[6],vals[7],vals[8],vals[9]))
+    configFile.write("Mode 2 range: 0.0  0.0 %f  %f %f  %f %f  %f %f  %f %f  %f 0.0  0.0"%(percs[0],percs[1],percs[2],percs[3],percs[4],percs[5],percs[6],percs[7],percs[8],percs[9]))
 
 
     configFile.close()
@@ -139,14 +165,15 @@ def makeGraph(jobID):
 #Generate list of experiment IDs and their associated string names (currently 111 elements long)
 idFile = file(MATH+'exptidname.txt','r')
 expids = [i.split() for i in idFile.readlines()[3:] if i[:3] != '000']
+expids = [i for i in expids if len(i) != 0]
 
 #Checkboxes
 boxes = [
-    #Experiments to include [0:112]
+    #Experiments to include [0:111]
     mdl.CheckBox('allexps','All',False,'expid','checkAllExps();') #'Select all' box
  ]+[mdl.CheckBox(i[0],i[1],False,'expid') for i in expids]+[
 
-    #Figures to plot [112:118]
+    #Figures to plot [111:117]
     mdl.CheckBox('type1','Experimental data points',False),
     mdl.CheckBox('type2','Experimental errors',False),
     mdl.CheckBox('type3','Residuals',False),
@@ -154,7 +181,7 @@ boxes = [
     mdl.CheckBox('type5','Sensitivity factor',False),
     mdl.CheckBox('type6','Correlation',False),
 
-    #Functions to use [118:133]
+    #Functions to use [117:132]
     mdl.CheckBox('func1','b<span class="bar">&#x203e;</span>',False),
     mdl.CheckBox('func2','c<span class="bar">&#x203e;</span>',False),
     mdl.CheckBox('func3','s<span class="bar">&#x203e;</span>',False),
@@ -171,7 +198,7 @@ boxes = [
     mdl.CheckBox('func14','q8',False),
     mdl.CheckBox('func15','user',False),
 
-    #Figure range 'auto' boxes [133:137]
+    #Figure range 'auto' boxes [132:136]
     mdl.CheckBox('xauto','Auto',True),
     mdl.CheckBox('muauto','Auto',True),
     mdl.CheckBox('hxauto','Auto',True),
@@ -290,7 +317,7 @@ if len(form) != 0:
         t.checkState(form)
 
     #Write the Mathematica configuration file
-    jobID = makeConfig(boxes,radios,texts)
+    jobID = makeConfig(boxes,radios,texts,selects)
 
     #Check if the graph being requested has already been generated and stored
 
@@ -304,8 +331,7 @@ if len(form) != 0:
         present = glob.glob(MATH+"lock")
         if len(present) == 0:
             #If it isn't there, run the program
-            #makeGraph()
-            pass
+            makeGraph()
         else:
             #Otherwise, read the job ID of the lockfile
             lockfile = file(MATH+'lock','r')
@@ -316,8 +342,7 @@ if len(form) != 0:
             prevPath = OUTPUT+prevID+IMAGE
             if len(glob.glob(prevPath)) != 0:
                 os.system('rm '+MATH+'lock')
-                #makeGraph()
-                pass
+                makeGraph()
             else:
                 #If not, assume another process is running and wait until an output with the lockfile ID has been generated, then reload the page
                 print TAB(2)+"<img id='graph' src='%sstate_busy.jpg'/><br/>\n"%ASSETS
@@ -490,15 +515,41 @@ print TAB(3)+'</table>\n'
 print TAB(3)+'<table>'
 print TAB(4)+'<tr>'
 
-for t in range(22,30)[::2]:
-    print TAB(5)+'<td>'
-    boxes[122+(t/2)].draw(6)
-    print TAB(6)+'<br/><br/>'
-    texts[t].draw(6)
-    print TAB(6)+'<br/><br/>'
-    texts[t+1].draw(6)
-    print TAB(6)+'<br/>'
-    print TAB(5)+'</td>'
+
+print TAB(5)+'<td>'
+boxes[133].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[22].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[23].draw(6)
+print TAB(6)+'<br/>'
+print TAB(5)+'</td>'
+
+print TAB(5)+'<td>'
+boxes[134].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[24].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[25].draw(6)
+print TAB(6)+'<br/>'
+print TAB(5)+'</td>'
+
+print TAB(5)+'<td>'
+boxes[135].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[26].draw(6)
+print TAB(6)+'<br/>'
+print TAB(5)+'</td>'
+
+print TAB(5)+'<td>'
+boxes[136].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[27].draw(6)
+print TAB(6)+'<br/><br/>'
+texts[28].draw(6)
+print TAB(6)+'<br/>'
+print TAB(5)+'</td>'
+
 
 print TAB(4)+'</tr>'
 print TAB(3)+'</table>'
