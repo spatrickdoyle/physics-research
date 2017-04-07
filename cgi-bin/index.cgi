@@ -45,11 +45,13 @@ def TAB(num):
 
     return ('    '*num)
 
-def makeConfig(boxes,radios,texts,selects):
+def makeConfig(boxes,radios,texts,selects,expids):
     '''makeConfig(List boxes, List radios, List texts)
     boxes: list of mdl CheckBox elements
     radios: list of mdl RadioBox elements
     texts: list of mdl Text elements
+    selects: list of drop down menu elements
+    expids: list of experiment ids to include in the config file
     return: the job ID associated with the submission
     Generates and writes the configuration file for the given set of parameters'''
 
@@ -69,7 +71,7 @@ def makeConfig(boxes,radios,texts,selects):
     textVals = ''.join([t.getState() for t in texts])
     textStr = ''.join([str(ord(i)-45) for i in textVals])
 
-    jobID = boxStr+radStr+textStr
+    jobID = str(int(sum([ord(i)-45 for i in (boxStr+radStr+textStr)])))
 
     #Job ID
     configFile.write("Job ID (copy from the counter file): %s\n"%jobID)
@@ -91,50 +93,47 @@ def makeConfig(boxes,radios,texts,selects):
     #Type
     configFile.write("Type:  1     2     3     4     5     6     7\n")
     #Flag
-    configFile.write("Flag:%s0\n\n"%(typestr[3:]))
+    configFile.write("Flag:%s     0\n\n"%(typestr[3:]))
 
     #Expt. ID
-    configFile.write("Expt. ID:   701   702   703   159   101   102   103   104   106   108   109   110   111   124   125   126   127   147   201   203   204   225   227   231   234   260   261   504   514   145   169   267   268   535   240   241   281   265   266   538\n")
+    configFile.write("Expt. ID:   "+''.join([i[0]+"   " for i in expids])+"\n")
     #Expt. Flag
     configFile.write("Expt. Flag:%s\n\n"%(flagstr[3:]))
 
     #Type
-    configFile.write("Type:  bb   cb   sb     db    ub     g     u     d     s     c     b   user\n")
+    configFile.write("Type:  bb   cb   sb     db    ub     g     u     d     s     c     b    q6   q7    q8   user\n")
     #Flag
     configFile.write("Flag:  %s\n\n"%funcstr)
 
     #Name
-    configFile.write("Name: %s"%texts[20])
+    configFile.write("Name: %s\n"%texts[20].getState())
     #Values
-    configFile.write("Values: %s\n\n"%texts[21])
+    configFile.write("Values: %s\n\n"%texts[21].getState())
 
     bounds = []
     for t in texts[22:29]:
-        print t.getState()
-        bounds.append(float(t.getState()))
+        bounds.append(t.getState())
 
     for i in range(133,137):
         if boxes[i].getState():
             bounds[i-133] = 'auto'
 
-    configFile.write("xmin,   xmax:  %f   %f\n"%(bounds[0],bounds[1]))
-    configFile.write("mumin, mumax:      %f %f\n\n"%(bounds[2],bounds[3]))
+    configFile.write("xmin,   xmax:  %s   %s\n"%(bounds[0],bounds[1]))
+    configFile.write("mumin, mumax:      %s %s\n\n"%(bounds[2],bounds[3]))
 
-    configFile.write("Number of bins: %f\n")%bounds[4]
-    configFile.write("xmin, xmax: %f  %f\n"%(bounds[5],bounds[6]))
+    configFile.write("Number of bins: %s\n"%(bounds[4]))
+    configFile.write("xmin, xmax: %s  %s\n"%(bounds[5],bounds[6]))
     configFile.write("ymin, ymax:  0 auto\n")
 
-    configFile.write("Color by data percentage: 50 70 85")
+    configFile.write("Color by data percentage: 50 70 85\n\n")
 
-    configFile.write("Size: %s"%(radios[1].getState()))
+    configFile.write("Size: %s\n\n"%(radios[1].labels[int(radios[1].getState())]))
 
-    configFile.write("Type:  1     2     3     4     5     6     7")
-    configFile.write("Mode:  0     %d     %d     %d     %d     %d     0"%(selects[0].getState(),selects[1].getState(),selects[2].getState(),selects[3].getState(),selects[4].getState()))
+    configFile.write("Type:  1     2     3     4     5     6     7\n")
+    configFile.write("Mode:  0     %d     %d     %d     %d     %d     0\n"%(selects[0].getState(),selects[1].getState(),selects[2].getState(),selects[3].getState(),selects[4].getState()))
 
-    vals = [float(texts[0].getState()),float(texts[1].getState()),float(texts[4].getState()),float(texts[5].getState()),float(texts[8].getState()),float(texts[9].getState()),float(texts[12].getState()),float(texts[13].getState()),float(texts[16].getState()),float(texts[17].getState())]
-    percs = [float(texts[2].getState()),float(texts[3].getState()),float(texts[6].getState()),float(texts[7].getState()),float(texts[10].getState()),float(texts[11].getState()),float(texts[14].getState()),float(texts[15].getState()),float(texts[18].getState()),float(texts[19].getState())]
-    configFile.write("Mode 1 range: 0.0  0.0 %f  %f %f  %f %f  %f %f  %f %f  %f 0.0  0.0"%(vals[0],vals[1],vals[2],vals[3],vals[4],vals[5],vals[6],vals[7],vals[8],vals[9]))
-    configFile.write("Mode 2 range: 0.0  0.0 %f  %f %f  %f %f  %f %f  %f %f  %f 0.0  0.0"%(percs[0],percs[1],percs[2],percs[3],percs[4],percs[5],percs[6],percs[7],percs[8],percs[9]))
+    configFile.write("Mode 1 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n"%(texts[0].getState(),texts[1].getState(),texts[4].getState(),texts[5].getState(),texts[8].getState(),texts[9].getState(),texts[12].getState(),texts[13].getState(),texts[16].getState(),texts[17].getState()))
+    configFile.write("Mode 2 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n"%(texts[2].getState(),texts[3].getState(),texts[6].getState(),texts[7].getState(),texts[10].getState(),texts[11].getState(),texts[14].getState(),texts[15].getState(),texts[18].getState(),texts[19].getState()))
 
 
     configFile.close()
@@ -217,26 +216,26 @@ radios = [
 #Text inputs
 texts = [
     #Value and percentage ranges for highlight mode functions 2-6 [0:20]
-    mdl.Text('vmin2','Min',0),
-    mdl.Text('vmax2','Max',0),
-    mdl.Text('pmin2','Min',0),
-    mdl.Text('pmax2','Max',0),
-    mdl.Text('vmin3','Min',0),
-    mdl.Text('vmax3','Max',0),
-    mdl.Text('pmin3','Min',0),
-    mdl.Text('pmax3','Max',0),
-    mdl.Text('vmin4','Min',0),
-    mdl.Text('vmax4','Max',0),
-    mdl.Text('pmin4','Min',0),
-    mdl.Text('pmax4','Max',0),
-    mdl.Text('vmin5','Min',0),
-    mdl.Text('vmax5','Max',0),
-    mdl.Text('pmin5','Min',0),
-    mdl.Text('pmax5','Max',0),
-    mdl.Text('vmin6','Min',0),
-    mdl.Text('vmax6','Max',0),
-    mdl.Text('pmin6','Min',0),
-    mdl.Text('pmax6','Max',0),
+    mdl.Text('vmin2','Min',1,0.0),
+    mdl.Text('vmax2','Max',1,0.0),
+    mdl.Text('pmin2','Min',1,0.0),
+    mdl.Text('pmax2','Max',1,0.0),
+    mdl.Text('vmin3','Min',1,0.0),
+    mdl.Text('vmax3','Max',1,0.0),
+    mdl.Text('pmin3','Min',1,0.0),
+    mdl.Text('pmax3','Max',1,0.0),
+    mdl.Text('vmin4','Min',1,0.0),
+    mdl.Text('vmax4','Max',1,0.0),
+    mdl.Text('pmin4','Min',1,0.0),
+    mdl.Text('pmax4','Max',1,0.0),
+    mdl.Text('vmin5','Min',1,0.0),
+    mdl.Text('vmax5','Max',1,0.0),
+    mdl.Text('pmin5','Min',1,0.0),
+    mdl.Text('pmax5','Max',1,0.0),
+    mdl.Text('vmin6','Min',1,0.0),
+    mdl.Text('vmax6','Max',1,0.0),
+    mdl.Text('pmin6','Min',1,0.0),
+    mdl.Text('pmax6','Max',1,0.0),
 
     #User function parameter [20:22]
     mdl.Text('userparamname','Name',0),
@@ -247,7 +246,7 @@ texts = [
     mdl.Text('xmax','X-max',1,1),
     mdl.Text('mumin','&#x03bc;-min',1,1.0),
     mdl.Text('mumax','&#x03bc;-max',1,2000),
-    mdl.Text('nbin','Nbin',1),
+    mdl.Text('nbin','Nbin',1,20),
     mdl.Text('hxmin','X-min',1,-3),
     mdl.Text('hxmax','X-max',1,3),
     mdl.Text('ymin','Y-min',1,0),
@@ -317,7 +316,7 @@ if len(form) != 0:
         t.checkState(form)
 
     #Write the Mathematica configuration file
-    jobID = makeConfig(boxes,radios,texts,selects)
+    jobID = makeConfig(boxes,radios,texts,selects,expids)
 
     #Check if the graph being requested has already been generated and stored
 
@@ -331,7 +330,8 @@ if len(form) != 0:
         present = glob.glob(MATH+"lock")
         if len(present) == 0:
             #If it isn't there, run the program
-            makeGraph()
+            #makeGraph(jobID)
+            pass
         else:
             #Otherwise, read the job ID of the lockfile
             lockfile = file(MATH+'lock','r')
@@ -342,7 +342,8 @@ if len(form) != 0:
             prevPath = OUTPUT+prevID+IMAGE
             if len(glob.glob(prevPath)) != 0:
                 os.system('rm '+MATH+'lock')
-                makeGraph()
+                #makeGraph(jobID)
+                pass
             else:
                 #If not, assume another process is running and wait until an output with the lockfile ID has been generated, then reload the page
                 print TAB(2)+"<img id='graph' src='%sstate_busy.jpg'/><br/>\n"%ASSETS
