@@ -27,7 +27,7 @@ import glob,os,time
 
 VERSION = '15' #Version of the Mathematica script
 ASSETS = '../../assets/' #Path to HTML page assets
-MATH = '../mathscript_v15/bin/' #Path to Mathematica script bin
+MATH = '../mathscript_v'+VERSION+'/bin/' #Path to Mathematica script bin
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
 
 CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica script bin directory
@@ -36,6 +36,7 @@ IMAGE = 'dr_xQ.jpg'
 print os.getcwd()
 #Set current working directory
 #os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION)
+os.chdir("/home/sean/Programs/git-repos/physics-research/cgi-bin")
 
 
 def TAB(num):
