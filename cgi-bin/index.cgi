@@ -27,14 +27,15 @@ import glob,os,time
 
 VERSION = '15' #Version of the Mathematica script
 ASSETS = '../../assets/' #Path to HTML page assets
-MATH = './' #Path to Mathematica script bin
+MATH = '../mathscript_v15/bin/' #Path to Mathematica script bin
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
 
 CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica script bin directory
 IMAGE = 'dr_xQ.jpg'
 
+print os.getcwd()
 #Set current working directory
-os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION)
+#os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION)
 
 
 def TAB(num):
@@ -286,14 +287,14 @@ print TAB(1)+"<head>"
 print TAB(2)+"<title>Physics test page</title>\n"
 
 #Google Material Design stylesheets
-print TAB(2)+"<link rel='stylesheet' href='%sct66.css'>"%ASSETS
-print TAB(2)+"<link rel='stylesheet' href='%smdl/material.min.css'>"%ASSETS
-print TAB(2)+"<script src='%smdl/material.min.js'></script>"%ASSETS
-print TAB(2)+"<link rel='stylesheet' href='%smdl/icon.css'>"%ASSETS
+#print TAB(2)+"<link rel='stylesheet' href='%sct66.css'>"%ASSETS
+#print TAB(2)+"<link rel='stylesheet' href='%smdl/material.min.css'>"%ASSETS
+#print TAB(2)+"<script src='%smdl/material.min.js'></script>"%ASSETS
+#print TAB(2)+"<link rel='stylesheet' href='%smdl/icon.css'>"%ASSETS
 
 #Other resources
-print TAB(2)+"<link rel='stylesheet' href='%sindex.css'>"%ASSETS
-print TAB(2)+"<script src='%sindex.js'></script>"%ASSETS
+#print TAB(2)+"<link rel='stylesheet' href='%sindex.css'>"%ASSETS
+#print TAB(2)+"<script src='%sindex.js'></script>"%ASSETS
 
 print TAB(1)+"</head>"
 
@@ -351,13 +352,14 @@ if len(form) != 0:
 
 else:
     #If the page IS being loaded for the first time, display the default image
-    print TAB(2)+"<img id='graph' src='%sstate_default.jpg'/><br/>\n"%ASSETS
+    #print TAB(2)+"<img id='graph' src='%sstate_default.jpg'/><br/>\n"%ASSETS
+	pass
 
 
 #Generate the actual HTML form and draw all the input elements
 #Reset and submit buttons
 buttons[1].draw(2)
-print TAB(2)+'<form action="index.py" method="post" style="display:inline">'
+print TAB(2)+'<form action="index.cgi" method="post" style="display:inline">'
 buttons[0].draw(2)
 print TAB(2)+'<br/>\n'
 
