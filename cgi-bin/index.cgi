@@ -26,7 +26,7 @@ cgitb.enable()
 import glob,os,time
 
 VERSION = '16' #Version of the Mathematica script
-ASSETS = '../../assets/' #Path to HTML page assets
+ASSETS = '../assets/' #Path to HTML page assets
 MATH = './' #Path to Mathematica script bin
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
 JS_PREFIX = '../mathscript_v%s/bin/'%VERSION
@@ -35,9 +35,9 @@ CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica s
 EXPIDS = 'exptidname_inconfig.txt'
 IMAGE = '/exptname_table.png'
 
-#print os.getcwd()
 #Set current working directory - this line is necessary on my localhost but not on the server for reasons currently unknown to me
-os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
+#os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
+os.chdir("../mathscript_v%s/bin"%VERSION)
 
 
 def TAB(num):
