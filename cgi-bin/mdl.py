@@ -158,7 +158,7 @@ class Text:
         print tabs*'    ' + '<span class="mdl-textfield__error">Enter a number</span>'
         print tabs*'    ' + '</div>'"""
 
-        print tabs*'    ' + self.label + ': <input type="text" class="mdl-textbox" name="'+self.name+'" id="'+self.name+'"'+self.state+'>'
+        print tabs*'    ' + self.label + ': <input type="text" name="'+self.name+'" id="'+self.name+'"'+self.state+'>'
 
     def checkState(self,form):
         '''checkState(Form form)
@@ -212,7 +212,7 @@ class Button:
 class Select:
     '''Wrapper class for a styled select element'''
 
-    def __init__(self,name,labels):
+    def __init__(self,name,labels,onchange="",idd=""):
         '''Select(string name, List label, int default=0)
         name: name of this element, used for internal reference
         label: labels which will be displayed in the menu on the HTML page
@@ -221,13 +221,15 @@ class Select:
         self.name = name
         self.labels = labels
         self.state = 0
+        self.onchange = onchange
+        self.idd = idd
 
     def draw(self,tabs):
         '''draw(int tabs)
         tabs: number of indentations to make before each line
         Prints HTML for displaying the select element'''
 
-        print tabs*'    ' + '<select name="%s">'%self.name
+        print tabs*'    ' + '<select id="%s" name="%s" onchange="%s">'%(self.idd,self.name,self.onchange)
         for i in range(len(self.labels)):
             if i != self.state:
                 print tabs*'    ' + '<option value="%s">%s</option>'%(self.labels[i],self.labels[i])

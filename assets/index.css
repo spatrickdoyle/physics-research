@@ -9,7 +9,7 @@ html {
 table {
 	margin-left: auto;
 	margin-right: auto;
-	width: 90%;
+	width: 95%;
 }
 
 td {
@@ -19,6 +19,8 @@ td {
 	border-style: solid;
 	border-color: black;
 	border-width: 1px;
+
+	background-color: #ffffff;
 }
 
 img {
@@ -33,10 +35,18 @@ img {
 	transition: visibility 0s linear 300ms, opacity 300ms;
 }
 
+.fadeOut * {
+	display: none;
+}
+
 .fadeIn {
 	visibility: visible;
 	opacity: 1;
 	transition: visibility 0s linear 0s, opacity 300ms;
+}
+
+.fadeIn * {
+	display: block;
 }
 
 .bar {
@@ -46,4 +56,8 @@ img {
 
 .mdl-textbox {
 	width: 30%;
+}
+
+button {
+	width: 150px;
 }

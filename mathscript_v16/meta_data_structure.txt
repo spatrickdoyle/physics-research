@@ -1,0 +1,58 @@
+data stored in quickdata
+
+$PDFname: the string after "PDF set:"
+
+filename for a PDFset: 
+{$PDFname}_correlation_data.m
+
+quickdatadata stored in files:
+quickdatadeltaR[[iexpt]], data structure = {LF[x,Q,deltaR], ...} 
+quickdatacorr[[iexpt,flavour]], data structure = {LF[x,Q,corr(residue(x,Q), f(x,Q,flavour))], ...}
+quickdataresidue[[iexpt]], data structure = {LF[x,Q,1,2,...Nset of residue], ...}
+quickdatatheoryerror[[iexpt]] data structure = {LF[x,Q,TH error/central], ...}
+quickdataexpterror[[iexpt]] data structure = {LF[x,Q,expt error/central], ...}
+
+for every elements in List, it is a class (Association in Mathematica) struture "FxQsameptdata" 
+Example of FxQsameptdata:
+FxQsameptdata =
+ Join[
+  Data,
+  <|
+   "exptinfo" -> Exptinfo,
+   "PDFinfo" -> PDFinfo
+   |>
+  ]
+
+Data =
+ <|
+  "label" -> {"x,"Q","deltaR"},
+  "data" -> {LF[x1,Q1,delta1],LF[x2,Q2,delta2],...}
+  |>
+
+Exptinfo =
+ <|
+  "exptid" -> 101,
+  "exptname" -> "BcdF2pCor",
+  "feyndiagram" -> "unset"
+  |>
+
+PDFinfo =
+ <|
+  "PDFname" -> "CT14NNLO",
+  "PDFsetmethod" -> "Hessian",
+  "Nset" -> 57,
+  "iset" -> "unset",
+  "flavour" -> "unset"
+  |>
+===============================================================
+description of some observable
+deltaR: Hessian symmetric uncertainty of residue
+corr: correlation
+residue: formula = (Theory - (shifted expt))/(unCorr error) (in every exptID of .dta file: ([[5]]-[[11]])/[[12]] )
+expt error/central: (expt error)/(expt central) (in every exptID of .dta file: [[6]]/[[4]] )
+TH error/central: (THeory error)/(Theory central), Theory error = Hessian asymmetric uncertainty of Theory
+
+
+
+
+

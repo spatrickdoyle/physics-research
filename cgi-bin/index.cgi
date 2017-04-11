@@ -25,18 +25,19 @@ cgitb.enable()
 #Other things
 import glob,os,time
 
-VERSION = '15' #Version of the Mathematica script
+VERSION = '16' #Version of the Mathematica script
 ASSETS = '../../assets/' #Path to HTML page assets
-MATH = '../mathscript_v'+VERSION+'/bin/' #Path to Mathematica script bin
+MATH = './' #Path to Mathematica script bin
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
+JS_PREFIX = '../mathscript_v%s/bin/'%VERSION
 
 CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica script bin directory
-IMAGE = 'dr_xQ.jpg'
+EXPIDS = 'exptidname_inconfig.txt'
+IMAGE = '/exptname_table.png'
 
 #print os.getcwd()
-#Set current working directory
-#os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION)
-#os.chdir("/home/sean/Programs/git-repos/physics-research/cgi-bin")
+#Set current working directory - this line is necessary on my localhost but not on the server for reasons currently unknown to me
+os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
 
 
 def TAB(num):
@@ -65,13 +66,11 @@ def makeConfig(boxes,radios,texts,selects,expids):
     configFile.write(time.strftime("#%X %x\n\n"))
 
     #Generate the job ID
-    boxVals = ''.join([str(int(box.getState())) for box in boxes])
-    boxStr = ''.join([str(int(boxVals[4*i:4*i+4],2)) for i in range(len(boxVals)/4)])
+    boxStr = str(int(''.join([str(int(box.getState())) for box in boxes])))
 
-    radStr = ''.join([str(rad.getState()) for rad in radios])
+    radStr = str(int(''.join([str(rad.getState()) for rad in radios])))
 
-    textVals = ''.join([t.getState() for t in texts])
-    textStr = ''.join([str(ord(i)-45) for i in textVals])
+    textStr = ''.join([t.getState() for t in texts])
 
     jobID = str(int(sum([ord(i)-45 for i in (boxStr+radStr+textStr)])))
 
@@ -85,11 +84,13 @@ def makeConfig(boxes,radios,texts,selects,expids):
     typestr = ""
     flagstr = ""
     funcstr = ""
-    for box in boxes[111:117]:
+    figures = []
+    for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
         typestr += "     %d"%box.getState()
-    for box in boxes[0:111]:
+        figures.append(box.getState())
+    for box in boxes[1:exp_boxes]:
         flagstr += "     %d"%box.getState()
-    for box in boxes[117:132]:
+    for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
         funcstr += "%d     "%box.getState()
 
     #Type
@@ -116,30 +117,36 @@ def makeConfig(boxes,radios,texts,selects,expids):
     for t in texts[22:29]:
         bounds.append(t.getState())
 
-    for i in range(133,137):
+    for i in range(exp_boxes+fig_boxes+func_boxes,exp_boxes+fig_boxes+func_boxes+auto_boxes):
         if boxes[i].getState():
-            bounds[i-133] = 'auto'
+            bounds[i-(exp_boxes+fig_boxes+func_boxes)] = 'auto'
 
     configFile.write("xmin,   xmax:  %s   %s\n"%(bounds[0],bounds[1]))
     configFile.write("mumin, mumax:      %s %s\n\n"%(bounds[2],bounds[3]))
 
     configFile.write("Number of bins: %s\n"%(bounds[4]))
     configFile.write("xmin, xmax: %s  %s\n"%(bounds[5],bounds[6]))
-    configFile.write("ymin, ymax:  0 auto\n")
+    configFile.write("ymin, ymax:  0 auto\n\n")
 
     configFile.write("Color by data percentage: 50 70 85\n\n")
-
-    configFile.write("Size: %s\n\n"%(radios[1].labels[int(radios[1].getState())]))
 
     configFile.write("Type:  1     2     3     4     5     6     7\n")
     configFile.write("Mode:  0     %d     %d     %d     %d     %d     0\n"%(selects[0].getState(),selects[1].getState(),selects[2].getState(),selects[3].getState(),selects[4].getState()))
 
     configFile.write("Mode 1 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n"%(texts[0].getState(),texts[1].getState(),texts[4].getState(),texts[5].getState(),texts[8].getState(),texts[9].getState(),texts[12].getState(),texts[13].getState(),texts[16].getState(),texts[17].getState()))
-    configFile.write("Mode 2 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n"%(texts[2].getState(),texts[3].getState(),texts[6].getState(),texts[7].getState(),texts[10].getState(),texts[11].getState(),texts[14].getState(),texts[15].getState(),texts[18].getState(),texts[19].getState()))
+    configFile.write("Mode 2 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n\n"%(texts[2].getState(),texts[3].getState(),texts[6].getState(),texts[7].getState(),texts[10].getState(),texts[11].getState(),texts[14].getState(),texts[15].getState(),texts[18].getState(),texts[19].getState()))
+
+    configFile.write("Size: %s\n\n"%(radios[1].labels[int(radios[1].getState())].lower()))
 
 
     configFile.close()
 
+    #IMAGE = []
+    #obsname = ["xQbyexpt","expt_error_ratio","residue","dr","corrdr","corr"]
+    #for i in range(6):
+    #    if figures[i]:
+    #        IMAGE.append(obsname[i]+"_xQ.png")
+    #return (jobID,IMAGE)
     return jobID
 
 def makeGraph(jobID):
@@ -156,31 +163,37 @@ def makeGraph(jobID):
     os.system("math -script "+MATH+"correlation_plot_project_v"+VERSION+"_script.m > log.txt&")
 
     #Check every 2 seconds to see if the graph is done being generated, and display it when it is
-    path = OUTPUT+jobID+IMAGE
-    print TAB(2)+"<img id='graph' src='"+ASSETS+"state_loading.jpg'/><br/>\n"
-    print TAB(2)+"""<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); document.getElementById('graph').src = "%s"; }; }, 2000);</script>"""%(path,path)
+    path = JS_PREFIX+OUTPUT+jobID+IMAGE
+    #print TAB(2)+"<img id='graph' src='"+ASSETS+"state_loading.jpg'/><br/>\n"
+    print TAB(2)+"<h3 id='graph'>Loading...<h3/><br/>\n"
+    #print TAB(2)+"""<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); document.getElementById('graph').src = "%s"; }; }, 2000);</script>"""%(path,path)
+    print TAB(2)+"""<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); document.getElementById('graph').innerHTML = "<a onclick='window.location.reload()'>Click to view plots</a>"; }; }, 2000);</script>"""%(path)
 
 
 #Create all the input elements that will be on the page
 
 #Generate list of experiment IDs and their associated string names (currently 111 elements long)
-idFile = file(MATH+'exptidname.txt','r')
-expids = [i.split() for i in idFile.readlines()[3:] if i[:3] != '000']
+idFile = file(MATH+EXPIDS,'r')
+expids = [i.split() for i in idFile.readlines()]
 expids = [i for i in expids if len(i) != 0]
 
 #Checkboxes
+exp_boxes = 41
+fig_boxes = 6
+func_boxes = 15
+auto_boxes = 4
 boxes = [
-    #Experiments to include [0:111]
+    #Experiments to include [0:38]
     mdl.CheckBox('allexps','All',False,'expid','checkAllExps();') #'Select all' box
  ]+[mdl.CheckBox(i[0],i[1],False,'expid') for i in expids]+[
 
     #Figures to plot [111:117]
     mdl.CheckBox('type1','Experimental data points',False),
-    mdl.CheckBox('type2','Experimental errors',False),
-    mdl.CheckBox('type3','Residuals',False),
-    mdl.CheckBox('type4','PDF errors on residuals',False),
-    mdl.CheckBox('type5','Sensitivity factor',False),
-    mdl.CheckBox('type6','Correlation',False),
+    mdl.CheckBox('type2','Experimental errors',False,None,"toggleBlock2('highlight0')"),
+    mdl.CheckBox('type3','Residuals',False,None,"toggleBlock2('highlight1')"),
+    mdl.CheckBox('type4','PDF errors on residuals',False,None,"toggleBlock2('highlight2')"),
+    mdl.CheckBox('type5','Sensitivity factor',False,None,"toggleBlock2('highlight3')"),
+    mdl.CheckBox('type6','Correlation',False,None,"toggleBlock2('highlight4')"),
 
     #Functions to use [117:132]
     mdl.CheckBox('func1','b<span class="bar">&#x203e;</span>',False),
@@ -197,13 +210,13 @@ boxes = [
     mdl.CheckBox('func12','q6',False),
     mdl.CheckBox('func13','q7',False),
     mdl.CheckBox('func14','q8',False),
-    mdl.CheckBox('func15','user',False),
+    mdl.CheckBox('func15','user',False,None,"toggleBlock2('user')"),
 
     #Figure range 'auto' boxes [132:136]
-    mdl.CheckBox('xauto','Auto',True),
-    mdl.CheckBox('muauto','Auto',True),
-    mdl.CheckBox('hxauto','Auto',True),
-    mdl.CheckBox('yauto','Auto',True)
+    mdl.CheckBox('xauto','Auto',True,None,"toggleBlock2('auto1')"),
+    mdl.CheckBox('muauto','Auto',True,None,"toggleBlock2('auto2')"),
+    mdl.CheckBox('hxauto','Auto',True,None,"toggleBlock2('auto3')"),
+    mdl.CheckBox('yauto','Auto',True,None,"toggleBlock2('auto4')")
 ]
 
 #Radio buttons
@@ -259,7 +272,7 @@ texts = [
 selects = [
     #Dropdowns for highlight mode (figures 2-6) [0:5]
     #mdl.Select('wtype1',['No highlighting','Value range','Percentage range']),
-    mdl.Select('wtype2',['No highlighting','Value range','Percentage range']),
+    mdl.Select('wtype2',['No highlighting','Value range','Percentage range']),#,"changeFunc('s1')","s1"),
     mdl.Select('wtype3',['No highlighting','Value range','Percentage range']),
     mdl.Select('wtype4',['No highlighting','Value range','Percentage range']),
     mdl.Select('wtype5',['No highlighting','Value range','Percentage range']),
@@ -303,11 +316,8 @@ print TAB(1)+"<body>"
 print TAB(2)+"<h1>LHC Particle Distributions</h1>"
 print TAB(2)+"<h2>Southern Methodist University Physics Department</h2>\n"
 
-
-#The complicated part
-#If a form has been submitted - this not is the first time the page is being loaded
+#Update input elements based on previous form submission
 if len(form) != 0:
-    #Update input elements based on previous form submission
     for box in boxes:
         box.checkState(form)
     for rad in radios:
@@ -317,52 +327,9 @@ if len(form) != 0:
     for t in texts:
         t.checkState(form)
 
-    #Write the Mathematica configuration file
-    jobID = makeConfig(boxes,radios,texts,selects,expids)
-
-    #Check if the graph being requested has already been generated and stored
-
-    #Check if the image is there
-    path = OUTPUT+jobID+IMAGE
-    if len(glob.glob(path)) != 0:
-        #If it is, display it
-        print TAB(2)+"<img id='graph' src='%s'/><br/>\n"%path
-    else:
-        #Check for the presence of the lockfile
-        present = glob.glob(MATH+"lock")
-        if len(present) == 0:
-            #If it isn't there, run the program
-            #makeGraph(jobID)
-            pass
-        else:
-            #Otherwise, read the job ID of the lockfile
-            lockfile = file(MATH+'lock','r')
-            prevID = lockfile.readline()[:-1]
-            lockfile.close()
-
-            #See if an output with the corresponding ID already exists, and if it does, delete the lockfile and generate the new graph
-            prevPath = OUTPUT+prevID+IMAGE
-            if len(glob.glob(prevPath)) != 0:
-                os.system('rm '+MATH+'lock')
-                #makeGraph(jobID)
-                pass
-            else:
-                #If not, assume another process is running and wait until an output with the lockfile ID has been generated, then reload the page
-                print TAB(2)+"<img id='graph' src='%sstate_busy.jpg'/><br/>\n"%ASSETS
-                print TAB(2)+'<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); location.reload();} }, 3000);</script>'%prevPath
-
-else:
-    #If the page IS being loaded for the first time, display the default image
-    #print TAB(2)+"<img id='graph' src='%sstate_default.jpg'/><br/>\n"%ASSETS
-	pass
-
-
 #Generate the actual HTML form and draw all the input elements
-#Reset and submit buttons
-buttons[1].draw(2)
-print TAB(2)+'<form action="index.cgi" method="post" style="display:inline">'
-buttons[0].draw(2)
-print TAB(2)+'<br/>\n'
+
+print TAB(2)+'<form action="index.cgi" method="post" style="display:inline" id="theForm">'
 
 print TAB(3)+'<table>'
 print TAB(4)+'<tr>'
@@ -391,32 +358,22 @@ print TAB(7)+'</tr>\n'
 
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[1:20]:
+for box in boxes[1:int(exp_boxes/4)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[20:39]:
+for box in boxes[int(exp_boxes/4):int(exp_boxes/2)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[39:58]:
+for box in boxes[int(exp_boxes/2):int(3*exp_boxes/4)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[58:77]:
-    box.draw(9)
-    print TAB(9)+'<br/>'
-print TAB(8)+'</td>'
-print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[77:96]:
-    box.draw(9)
-    print TAB(9)+'<br/>'
-print TAB(8)+'</td>'
-print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[96:112]:
+for box in boxes[int(3*exp_boxes/4):exp_boxes]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
@@ -436,37 +393,56 @@ print TAB(6)+'Figures to plot:<br/><br/>\n'
 print TAB(6)+'<table>'
 
 print TAB(7)+'<tr>'
-for box in boxes[112:118]:
-    print TAB(8)+'<td style="width: 30%">'
+for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
+    print TAB(8)+'<td style="width: 17%">'
     box.draw(9)
     print TAB(8)+'</td>'
 print TAB(7)+'</tr>\n'
 
 print TAB(7)+'<tr>'
-print TAB(8)+'<td></td>'
-for s in selects[0:5]:
-    print TAB(8)+'<td>'
+print TAB(8)+'<td style="visibility:hidden"></td>'
+for s in range(0,5):
+    if not boxes[exp_boxes+1+s].getState():
+        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(s)
+
+    else:
+        print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(s)
     print TAB(9)+'Highlight mode:<br/>'
-    s.draw(9)
-    print TAB(8)+'</td>'
+    selects[s].draw(9)
+    print TAB(8)+'</span></td>'
 print TAB(7)+'</tr>\n'
 
 print TAB(7)+'<tr>'
-print TAB(8)+'<td></td>'
+print TAB(8)+'<td style="visibility:hidden"></td>'
 for t in range(5):
-    print TAB(8)+'<td>'
+    if not boxes[exp_boxes+1+t].getState():
+        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
+
+    else:
+        print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
     print TAB(9)+'Input range of values:<br/>'
     texts[4*t].draw(9)
     print TAB(9)+'<br/>'
     texts[4*t +1].draw(9)
 
-    print TAB(9)+'<br/><br/>'
+    print TAB(9)+'<br/>'
+    print TAB(8)+'</span></td>'
+print TAB(7)+'</tr>'
+
+print TAB(7)+'<tr>'
+print TAB(8)+'<td style="visibility:hidden"></td>'
+for t in range(5):
+    if not boxes[exp_boxes+1+t].getState():
+        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
+
+    else:
+        print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
 
     print TAB(9)+'Input range of percentages:<br/>'
     texts[4*t +2].draw(9)
     print TAB(9)+'<br/>'
     texts[4*t +3].draw(9)
-    print TAB(8)+'</td>'
+    print TAB(8)+'</span></td>'
 print TAB(7)+'</tr>'
 
 print TAB(6)+'</table>'
@@ -482,7 +458,7 @@ print TAB(6)+'Functions to use in correlations:<br/><br/>\n'
 print TAB(6)+'<table>'
 print TAB(7)+'<tr>'
 
-for box in boxes[118:133]:
+for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
     print TAB(8)+'<td>'
     box.draw(9)
     print TAB(9)+'<br/>'
@@ -491,7 +467,10 @@ for box in boxes[118:133]:
 print TAB(7)+'</tr>'
 print TAB(6)+'</table>\n'
 
-print TAB(6)+'<table>'
+if not boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
+    print TAB(6)+'<table class="user fadeOut">'
+else:
+    print TAB(6)+'<table class="user fadeIn">'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td>'
 texts[20].draw(9)
@@ -510,59 +489,155 @@ print TAB(4)+'<tr>'
 
 
 print TAB(5)+'<td>'
-boxes[133].draw(6)
+print "Data plot X range:<br/>"
+boxes[exp_boxes+fig_boxes+func_boxes].draw(6)
 print TAB(6)+'<br/><br/>'
+if boxes[exp_boxes+fig_boxes+func_boxes].getState():
+    print "<span class='auto1 fadeOut'>"
+else:
+    print "<span class='auto1 fadeIn'>"
 texts[22].draw(6)
 print TAB(6)+'<br/><br/>'
 texts[23].draw(6)
 print TAB(6)+'<br/>'
-print TAB(5)+'</td>'
+print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
-boxes[134].draw(6)
+print "Data plot &#x03bc; range:<br/>"
+boxes[exp_boxes+fig_boxes+func_boxes+1].draw(6)
 print TAB(6)+'<br/><br/>'
+if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
+    print "<span class='auto2 fadeOut'>"
+else:
+    print "<span class='auto2 fadeIn'>"
 texts[24].draw(6)
 print TAB(6)+'<br/><br/>'
 texts[25].draw(6)
 print TAB(6)+'<br/>'
-print TAB(5)+'</td>'
+print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
-boxes[135].draw(6)
+print "Histogram data range:<br/>"
+boxes[exp_boxes+fig_boxes+func_boxes+2].draw(6)
 print TAB(6)+'<br/><br/>'
+if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
+    print "<span class='auto3 fadeOut'>"
+else:
+    print "<span class='auto3 fadeIn'>"
 texts[26].draw(6)
 print TAB(6)+'<br/>'
-print TAB(5)+'</td>'
+print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
-boxes[136].draw(6)
+print "Histogram X range:<br/>"
+boxes[exp_boxes+fig_boxes+func_boxes+3].draw(6)
 print TAB(6)+'<br/><br/>'
+if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
+    print "<span class='auto4 fadeOut'>"
+else:
+    print "<span class='auto4 fadeIn'>"
 texts[27].draw(6)
 print TAB(6)+'<br/><br/>'
 texts[28].draw(6)
 print TAB(6)+'<br/>'
-print TAB(5)+'</td>'
+print TAB(5)+'</span></td>'
 
 
 print TAB(4)+'</tr>'
 print TAB(3)+'</table>'
 
-'''if not boxes[0].getState():
-    print '            <table id="level2" class="fadeOut">'
-else:
-    print '            <table id="level2" class="fadeIn">'
-print '                <tr>'
-print '                    <td>'
-print 'The second beam consists of:<br/>'
-radios[1].draw()
-print '                    </td>'
-print '                    <td>'
-print "something else"
-print '                    </td>'
-print '                </tr>'
-print '            </table>' '''
-
+#Reset and submit buttons
+print "<br/>"
+buttons[0].draw(2)
+print "&nbsp;"
 print TAB(2)+'</form>'
+buttons[1].draw(2)
+print TAB(2)+'<br/><br/><br/>\n'
+
+#The complicated part
+#If a form has been submitted - this not is the first time the page is being loaded
+if len(form) != 0:
+
+    #Write the Mathematica configuration file
+    jobID = makeConfig(boxes,radios,texts,selects,expids)
+
+    #Check if the graph being requested has already been generated and stored
+
+    #Check if the plot is there
+    path = OUTPUT+jobID
+    images = sorted(glob.glob(path+"/*.png"))
+    #print len(images)
+    #print 1+boxes[exp_boxes+1].getState()
+    if len(images) != 0:
+        #If it is, display and nicely format the generated images
+        print TAB(2)+"<img src='%s'/><br/>"%(JS_PREFIX+OUTPUT+jobID+"/exptname_table.png")
+        print "<a href='%s'>Download configuration file</a>"%(JS_PREFIX+CONFIG)
+
+        print "<table style='width:100%'><tr>"
+        for image in images:
+            if "_xQ" in image:
+                print "<td style='width:3000px;border:none'>"
+                print TAB(2)+"<img style='width:100%' src='"+JS_PREFIX+image+"'/><br/>\n"
+                print "<a href='../mathscript_v16/"+JS_PREFIX+image+"'>View full image</a></td>"
+        print "</tr><br/><tr>"
+
+        print "</tr></table>"
+
+        print "<table style='width:50%'><tr>"
+
+        for image in images:
+            if "_legend" in image:
+                print "<td style='border:none'>"
+                print TAB(2)+"<img style='width:100%' src='"+JS_PREFIX+image+"'/><br/>\n"
+                print "<a href='../mathscript_v16/"+JS_PREFIX+image+"'>View full image</a></td>"
+        print "</tr><br/><tr>"
+
+        for image in images:
+            if "_hist1" in image:
+                print "<td style='border:none'>"
+                print TAB(2)+"<img style='width:100%' src='"+JS_PREFIX+image+"'/><br/>\n"
+                print "<a href='../mathscript_v16/"+JS_PREFIX+image+"'>View full image</a></td>"
+        print "</tr><br/><tr>"
+
+        for image in images:
+            if "_hist2" in image:
+                print "<td style='border:none'>"
+                print TAB(2)+"<img style='width:100%' src='"+JS_PREFIX+image+"'/><br/>\n"
+                print "<a href='../mathscript_v16/"+JS_PREFIX+image+"'>View full image</a></td>"
+        print "<br/>"
+
+        print "</tr></table>"
+    else:
+        #Check for the presence of the lockfile
+        present = glob.glob(MATH+"lock")
+        if len(present) == 0:
+            #If it isn't there, run the program
+            makeGraph(jobID)
+            #pass
+        else:
+            #Otherwise, read the job ID of the lockfile
+            lockfile = file(MATH+'lock','r')
+            prevID = lockfile.readline()[:-1]
+            lockfile.close()
+
+            #See if an output with the corresponding ID already exists, and if it does, delete the lockfile and generate the new graph
+            prevPath = OUTPUT+prevID+IMAGE
+            if len(glob.glob(prevPath)) != 0:
+                os.system('rm '+MATH+'lock')
+                makeGraph(jobID)
+                #pass
+            else:
+                #If not, assume another process is running and wait until an output with the lockfile ID has been generated, then reload the page
+                #print TAB(2)+"<img id='graph' src='%sstate_busy.jpg'/><br/>\n"%ASSETS
+                print TAB(2)+"<h3 id='graph'>Waiting for another request to finish...</h3><br/>\n"
+                print TAB(2)+'<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); location.reload();} }, 3000);</script>'%(JS_PREFIX+prevPath)
+
+else:
+    #If the page IS being loaded for the first time...
+    #TODO: Create a 'history' box of previous requests
+    #print TAB(2)+"<img id='graph' src='%sstate_default.jpg'/><br/>\n"%ASSETS
+    print TAB(2)+"Plots will be displayed here<br/><br/>\n"
+    #pass
 
 print TAB(1)+'</body>'
 print '</html>'
