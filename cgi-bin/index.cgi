@@ -36,8 +36,8 @@ EXPIDS = 'exptidname_inconfig.txt'
 IMAGE = '/exptname_table.png'
 
 #Set current working directory - this line is necessary on my localhost but not on the server for reasons currently unknown to me
-#os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
-os.chdir("../mathscript_v%s/bin"%VERSION)
+os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
+#os.chdir("../mathscript_v%s/bin"%VERSION)
 
 
 def TAB(num):
@@ -72,7 +72,8 @@ def makeConfig(boxes,radios,texts,selects,expids):
 
     textStr = ''.join([t.getState() for t in texts])
 
-    jobID = str(int(sum([ord(i)-45 for i in (boxStr+radStr+textStr)])))
+    jobStr = boxStr+radStr+textStr
+    jobID = str(int(sum([(ord(jobStr[i])-45)*i for i in range(len(jobStr))])))
 
     #Job ID
     configFile.write("Job ID (copy from the counter file): %s\n"%jobID)
@@ -81,17 +82,25 @@ def makeConfig(boxes,radios,texts,selects,expids):
     configFile.write("PDF set: CT14NNLO\n\n")
 
     #Generate the sections for figure to plot, experiments to include, and functions to use
-    typestr = ""
+    typestr = [0 for i in range(6)]
     flagstr = ""
-    funcstr = ""
+    funcstr = [0 for i in range(15)]
     figures = []
-    for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
-        typestr += "     %d"%box.getState()
-        figures.append(box.getState())
+    if boxes[exp_boxes].getState():
+        typestr[0] = 1
+    typestr[int(boxes[exp_boxes+1].getState())+1] = 1
+    typestr = "     "+("     ".join([str(i) for i in typestr]))
+    #for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
+    #    typestr += "     %d"%box.getState()
+    #    figures.append(box.getState())
     for box in boxes[1:exp_boxes]:
         flagstr += "     %d"%box.getState()
-    for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
-        funcstr += "%d     "%box.getState()
+    #for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
+    #    funcstr += "%d     "%box.getState()
+    if boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
+        funcstr[-1] = 1
+    funcstr[int(boxes[exp_boxes+fig_boxes].getState())] = 1
+    funcstr = ("     ".join([str(i) for i in funcstr]))
 
     #Type
     configFile.write("Type:  1     2     3     4     5     6     7\n")
@@ -179,40 +188,69 @@ expids = [i for i in expids if len(i) != 0]
 
 #Checkboxes
 exp_boxes = 41
-fig_boxes = 6
-func_boxes = 15
+fig_boxes = 2#6
+func_boxes = 2#15
 auto_boxes = 4
 boxes = [
-    #Experiments to include [0:38]
+    #Experiments to include
     mdl.CheckBox('allexps','All',False,'expid','checkAllExps();') #'Select all' box
  ]+[mdl.CheckBox(i[0],i[1],False,'expid') for i in expids]+[
 
-    #Figures to plot [111:117]
+    #Figures to plot
     mdl.CheckBox('type1','Experimental data points',False),
-    mdl.CheckBox('type2','Experimental errors',False,None,"toggleBlock2('highlight0')"),
-    mdl.CheckBox('type3','Residuals',False,None,"toggleBlock2('highlight1')"),
-    mdl.CheckBox('type4','PDF errors on residuals',False,None,"toggleBlock2('highlight2')"),
-    mdl.CheckBox('type5','Sensitivity factor',False,None,"toggleBlock2('highlight3')"),
-    mdl.CheckBox('type6','Correlation',False,None,"toggleBlock2('highlight4')"),
+    mdl.RadioBox('figtype',[
+        'Experimental errors',
+        'Residuals',
+        'PDF errors on residuals',
+        'Sensitivity factor'
+        ,'Correlation'
+    ],0,[
+        'toggleRadio(0,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
+        'toggleRadio(1,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
+        'toggleRadio(2,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
+        'toggleRadio(3,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
+        'toggleRadio(4,["highlight0","highlight1","highlight2","highlight3","highlight4"])'
+    ]),
+    #mdl.CheckBox('type2','Experimental errors',False,None,"toggleBlock2('highlight0')"),
+    #mdl.CheckBox('type3','Residuals',False,None,"toggleBlock2('highlight1')"),
+    #mdl.CheckBox('type4','PDF errors on residuals',False,None,"toggleBlock2('highlight2')"),
+    #mdl.CheckBox('type5','Sensitivity factor',False,None,"toggleBlock2('highlight3')"),
+    #mdl.CheckBox('type6','Correlation',False,None,"toggleBlock2('highlight4')"),
 
-    #Functions to use [117:132]
-    mdl.CheckBox('func1','b<span class="bar">&#x203e;</span>',False),
-    mdl.CheckBox('func2','c<span class="bar">&#x203e;</span>',False),
-    mdl.CheckBox('func3','s<span class="bar">&#x203e;</span>',False),
-    mdl.CheckBox('func4','d<span class="bar">&#x203e;</span>',False),
-    mdl.CheckBox('func5','u<span class="bar">&#x203e;</span>',False),
-    mdl.CheckBox('func6','g',False),
-    mdl.CheckBox('func7','u',False),
-    mdl.CheckBox('func8','d',False),
-    mdl.CheckBox('func9','s',False),
-    mdl.CheckBox('func10','c',False),
-    mdl.CheckBox('func11','b',False),
-    mdl.CheckBox('func12','q6',False),
-    mdl.CheckBox('func13','q7',False),
-    mdl.CheckBox('func14','q8',False),
+    #Functions to use
+    mdl.RadioBox('function',[
+        'b<span class="bar">&#x203e;</span>',
+        'c<span class="bar">&#x203e;</span>',
+        's<span class="bar">&#x203e;</span>',
+        'd<span class="bar">&#x203e;</span>',
+        'u<span class="bar">&#x203e;</span>',
+        'g',
+        'u',
+        'd',
+        's',
+        'c',
+        'b',
+        'q6',
+        'q7',
+        'q8'
+    ]),
+    #mdl.CheckBox('func1','b<span class="bar">&#x203e;</span>',False),
+    #mdl.CheckBox('func2','c<span class="bar">&#x203e;</span>',False),
+    #mdl.CheckBox('func3','s<span class="bar">&#x203e;</span>',False),
+    #mdl.CheckBox('func4','d<span class="bar">&#x203e;</span>',False),
+    #mdl.CheckBox('func5','u<span class="bar">&#x203e;</span>',False),
+    #mdl.CheckBox('func6','g',False),
+    #mdl.CheckBox('func7','u',False),
+    #mdl.CheckBox('func8','d',False),
+    #mdl.CheckBox('func9','s',False),
+    #mdl.CheckBox('func10','c',False),
+    #mdl.CheckBox('func11','b',False),
+    #mdl.CheckBox('func12','q6',False),
+    #mdl.CheckBox('func13','q7',False),
+    #mdl.CheckBox('func14','q8',False),
     mdl.CheckBox('func15','user',False,None,"toggleBlock2('user')"),
 
-    #Figure range 'auto' boxes [132:136]
+    #Figure range 'auto' boxes
     mdl.CheckBox('xauto','Auto',True,None,"toggleBlock2('auto1')"),
     mdl.CheckBox('muauto','Auto',True,None,"toggleBlock2('auto2')"),
     mdl.CheckBox('hxauto','Auto',True,None,"toggleBlock2('auto3')"),
@@ -225,7 +263,12 @@ radios = [
     mdl.RadioBox('pdfset',['CT14NNLO']),
 
     #Point size [1]
-    mdl.RadioBox('pointsize',['Tiny','Small','Medium','Large'])
+    mdl.RadioBox('pointsize',[
+        'Tiny',
+        'Small',
+        'Medium',
+        'Large'
+    ])
 ]
 
 #Text inputs
@@ -402,8 +445,11 @@ print TAB(7)+'</tr>\n'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
 for s in range(0,5):
-    if not boxes[exp_boxes+1+s].getState():
-        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(s)
+    if boxes[exp_boxes+1].getState() != s:
+        if (len(form) == 0)and(s == 0):
+            print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(s)
+        else:
+            print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(s)
 
     else:
         print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(s)
@@ -415,8 +461,11 @@ print TAB(7)+'</tr>\n'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
 for t in range(5):
-    if not boxes[exp_boxes+1+t].getState():
-        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
+    if boxes[exp_boxes+1].getState() != t:
+        if (len(form) == 0)and(t == 0):
+            print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
+        else:
+            print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
 
     else:
         print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
@@ -432,8 +481,11 @@ print TAB(7)+'</tr>'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
 for t in range(5):
-    if not boxes[exp_boxes+1+t].getState():
-        print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
+    if boxes[exp_boxes+1].getState() != t:
+        if (len(form) == 0)and(t == 0):
+            print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
+        else:
+            print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
 
     else:
         print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
@@ -456,15 +508,24 @@ print TAB(4)+'<tr>'
 print TAB(5)+'<td>'
 print TAB(6)+'Functions to use in correlations:<br/><br/>\n'
 print TAB(6)+'<table>'
+
 print TAB(7)+'<tr>'
-
-for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
-    print TAB(8)+'<td>'
-    box.draw(9)
-    print TAB(9)+'<br/>'
-    print TAB(8)+'</td>'
-
+print TAB(8)+'<td>'
+boxes[exp_boxes+fig_boxes+1].draw(9)
+print TAB(9)+'<br/>'
+print TAB(8)+'</td>'
 print TAB(7)+'</tr>'
+
+if not boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
+    print TAB(7)+'<tr class="user fadeIn">'
+else:
+    print TAB(7)+'<tr class="user fadeOut">'
+print TAB(8)+'<td>'
+boxes[exp_boxes+fig_boxes].draw(9)
+print TAB(9)+'<br/>'
+print TAB(8)+'</td>'
+print TAB(7)+'</tr>'
+
 print TAB(6)+'</table>\n'
 
 if not boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
@@ -583,7 +644,7 @@ if len(form) != 0:
 
         print "</tr></table>"
 
-        print "<table style='width:50%'><tr>"
+        print "<table style='width:40%'><tr>"
 
         for image in images:
             if "_legend" in image:

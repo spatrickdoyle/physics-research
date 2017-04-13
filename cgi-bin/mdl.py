@@ -74,18 +74,23 @@ class CheckBox:
 class RadioBox:
     '''Wrapper class for displaying and storing the values of sets of radio buttons, styled with the Google MDL toolkit'''
 
-    def __init__(self,name,labels,default=0):
+    def __init__(self,name,labels,default=0,onuse=None):
         '''RadioBox(string name, List label, int default=0)
         name: name of this element, used for internal reference
         label: labels which will be displayed next to the boxes on the HTML page
         default: the default value of this element, before it has been used
+        onuse: list of strings, javascript calls to make, one for each radio button
         Initializes class properties according to arguments'''
 
         self.name = name
         self.labels = labels
         self.default = default
-        self.states = ["" for i in range(len(labels))]
+        self.states = ["" for i in labels]
         self.states[default] = " checked"
+        if onuse:
+            self.onuse = [" onclick='%s'"%i for i in onuse]
+        else:
+            self.onuse = ["" for i in labels]
 
     def draw(self,tabs):
         '''draw(int tabs)
@@ -94,7 +99,7 @@ class RadioBox:
 
         for i in range(len(self.labels)):
             print tabs*'    ' + '<label class="mdl-radio mdl-js-radio" for="'+self.name+'-'+str(i)+'">'
-            print tabs*'    ' + '<input type="radio" id="'+self.name+'-'+str(i)+'" class="mdl-radio__button" name="'+self.name+'" value="'+str(i)+'"'+self.states[i]+'>'
+            print tabs*'    ' + '<input type="radio" id="'+self.name+'-'+str(i)+'" class="mdl-radio__button" name="'+self.name+'" value="'+str(i)+'"'+self.states[i]+self.onuse[i]+'>'
             print tabs*'    ' + '<span class="mdl-radio__label">'+self.labels[i]+'</span>'
             print tabs*'    ' + '</label><br/>'
 

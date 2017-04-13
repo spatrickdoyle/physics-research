@@ -32,6 +32,7 @@ img {
 .fadeOut {
 	visibility: hidden;
 	opacity: 0;
+	display: none;
 	transition: visibility 0s linear 300ms, opacity 300ms;
 }
 
@@ -42,11 +43,12 @@ img {
 .fadeIn {
 	visibility: visible;
 	opacity: 1;
+	display: default;
 	transition: visibility 0s linear 0s, opacity 300ms;
 }
 
 .fadeIn * {
-	display: block;
+	display: default;
 }
 
 .bar {

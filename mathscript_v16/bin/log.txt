@@ -1,99 +1,26 @@
 begin function
-input arguments: {743, CT14NNLO, {1, 2, 3, 4, 5, 6, 7}, {1, 0, 1, 0, 0, 0, 0}, {701, 702, 703, 159, 101, 102, 103, 104, 106, 108, 109, 110, 111, 124, 125, 126, 127, 147, 201, 203, 204, 225, 227, 231, 234, 260, 261, 504, 514, 145, 169, 267, 268, 535, 240, 241, 281, 265, 266, 538}, {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {bb, cb, sb, db, ub, g, u, d, s, c, b, q6, q7, q8, user}, {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},  , {}, {auto, auto}, {1., auto}, 20., {-3., 3.}, {0, auto}, {50, 70, 85}, tiny, {1, 2, 3, 4, 5, 6, 7}, {0, 0, 0, 0, 0, 0, 0}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}}
+input arguments: {79251, CT14NNLO, {1, 2, 3, 4, 5, 6, 7}, {1, 0, 0, 0, 1, 0, 0}, {701, 702, 703, 159, 101, 102, 103, 104, 106, 108, 109, 110, 111, 124, 125, 126, 127, 147, 201, 203, 204, 225, 227, 231, 234, 260, 261, 504, 514, 145, 169, 267, 268, 535, 240, 241, 281, 265, 266, 538}, {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {bb, cb, sb, db, ub, g, u, d, s, c, b, q6, q7, q8, user}, {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},  , {}, {auto, auto}, {auto, auto}, 20., {-3., 3.}, {0, auto}, {50, 70, 85}, tiny, {1, 2, 3, 4, 5, 6, 7}, {0, 0, 0, 0, 2, 0, 0}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}}
 present directory:
 /home/sean/Programs/git-repos/physics-research/mathscript_v16/bin
 quick correlation data:
 ../quick_data/CT14NNLO_correlation_data.m
 loading quick correlation data...
 read experimental id
-error, #user value is different, it should be 57
-error, two observables has different length
-
-Part::partd: Part specification 0[[1]] is longer than depth of object.
-
-Part::partd: Part specification 0[[2]] is longer than depth of object.
-
-Part::partd: Part specification 0[[3]] is longer than depth of object.
-
-General::stop: Further output of Part::partd will be suppressed during this calculation.
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-error, two observables has different length
-the exptid = {702}are not found in database
-expt list: {702, 111, 125}
-expt list in the ./quick_data: {111, 125}
+the exptid = {103}are not found in database
+expt list: {103, 125, 225}
+expt list in the ./quick_data: {125, 225}
 {}
-{32}
+{}
 {0}
-{2}
+{0}
+making plot of figure type 5, flavour = 2
+
+ListPlot::prng: Value of option PlotRange -> {{Log[auto], Log[auto]}, {Log[auto], Log[auto]}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
+making table of experiments included in plots
 making plot of figure type 1
 
-ListLogLogPlot::prng: Value of option PlotRange -> {{auto, auto}, {1., auto}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
+ListLogLogPlot::prng: Value of option PlotRange -> {{auto, auto}, {auto, auto}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
 making table of experiments included in plots
-making plot of figure type 3
-
-ListPlot::prng: Value of option PlotRange -> {{Log[auto], Log[auto]}, {0., Log[auto]}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
+time to make plots is {5.608456, Null} seconds
 making table of experiments included in plots
-time to make plots is {5.118308, Null} seconds
-making table of experiments included in plots
-total time to run is {6.889788, Null} seconds
+total time to run is {6.845084, Null} seconds
