@@ -1,0 +1,2544 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    107662,       2536]
+NotebookOptionsPosition[    104971,       2453]
+NotebookOutlinePosition[    105304,       2468]
+CellTagsIndexPosition[    105261,       2465]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "config", " ", "file"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"script", " ", "version"}], ",", " ", 
+    RowBox[{
+    "add", " ", "runfunc", " ", "mode", " ", "into", " ", "configure", " ", 
+     "file"}], ",", " ", 
+    RowBox[{
+    "so", " ", "that", " ", "user", " ", "can", " ", "use", " ", "commands", 
+     " ", "to", " ", "decide", " ", "which", " ", "function", " ", "he", " ", 
+     "want", " ", "to", " ", "run"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"readcorrconfigfile2", "[", 
+    RowBox[{"configDirin_", ",", "configfilenamein_"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"configDir", "=", "configDirin"}], ",", 
+       RowBox[{"configfilename", "=", "configfilenamein"}], ",", 
+       "\[IndentingNewLine]", "runfunc", ",", "figureDir", ",", "myPDFsetDir",
+        ",", "PDFsetmethod", ",", "PDFname", ",", "PDFDataDir", ",", 
+       "CorrDataDir", ",", "datalistFile", ",", "expttype", ",", "exptid", 
+       ",", "\[IndentingNewLine]", "runfunctag", ",", "figureDirtag", ",", 
+       "PDFsetDirtag", ",", "PDFsetmethodtag", ",", "PDFDataDirtag", ",", 
+       "CorrDataDirtag", ",", "PDFnametag", ",", "datalistFiletag", ",", 
+       "expttypetag", ",", "exptidtag", ",", "\[IndentingNewLine]", 
+       "runfunctext", ",", "figureDirtext", ",", "PDFsetDirtext", ",", 
+       "PDFsetmethodtext", ",", "PDFDataDirtext", ",", "CorrDataDirtext", ",",
+        "PDFnametext", ",", "datalistFiletext", ",", "expttypetext", ",", 
+       "exptidtext", ",", "\[IndentingNewLine]", "s", ",", "output", ",", 
+       "exptidtmp"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"set", " ", "tag", " ", "of", " ", "arguments"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"PDFnametag", "=", "\"\<PDF set:\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Figuretypetag", "=", "\"\<Flag:\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Figuretypeflagtag", "=", "\"\<Flag:\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"exptidtag", "=", "\"\<Expt. Flag:\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"runfunctag", "=", "\"\< = runfunc !\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"figureDirtag", "=", "\"\< = figureDirtag !\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"PDFsetDirtag", "=", "\"\< = PDFsetDir !\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PDFsetmethodtag", "=", "\"\< = PDFsetmethod !\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"PDFDataDirtag", "=", "\"\< = PDFDataDir !\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"CorrDataDirtag", "=", "\"\< = CorrDataDir !\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PDFnametag", "=", "\"\<PDF set:\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"datalistFiletag", "=", "\"\< = datalist !\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"expttypetag", "=", "\"\< = expttype !\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"exptidtag", "=", "\"\< = exptid !\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+       "set", " ", "text", " ", "for", " ", "explanation", " ", "of", " ", 
+        "arguments"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+      "runfunctext", "=", 
+       "\"\< the action you want to do, what you can do: save_fx, \
+save_corr_plots\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+      "figureDirtext", "=", 
+       "\"\< the directory used to save figure files\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"PDFsetDirtext", "=", "\"\<  PDFset directory \>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+      "PDFsetmethodtext", "=", "\"\<  method used to generate PDFset \>\""}], 
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "PDFDataDirtext", "=", "\"\<  directory storing f(x,Q) data \>\""}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{
+      "CorrDataDirtext", "=", 
+       "\"\<  directory storing correlation data \>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+      "PDFnametext", "=", "\"\<  PDFname of file storing f(x,Q) value \>\""}],
+       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "datalistFiletext", "=", 
+       "\"\<  datalist with experimental information \>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "expttypetext", "=", 
+       "\"\<  expt type mode: single, multi, All, ProtonNeutron are available \
+options \>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"exptidtext", "=", "\"\<  experimental ID \>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"tag", " ", "of", " ", "arguments"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"PDFsetDirtag", "=", "\"\< = PDFset directory !\>\""}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+        "PDFsetmethodtag", "=", 
+         "\"\< = method used to generate PDFset !\>\""}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{
+        "PDFDataDirtag", "=", "\"\< = directory storing f(x,Q) data !\>\""}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{
+        "CorrDataDirtag", "=", 
+         "\"\< = directory storing correlation data !\>\""}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+        "PDFnametag", "=", 
+         "\"\< = PDFname of file storing f(x,Q) value !\>\""}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{
+        "datalistFiletag", "=", 
+         "\"\< = datalist with experimental information !\>\""}], ";"}], 
+       "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"initialize", " ", "arguments"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"runfunc", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"figureDir", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"myPDFsetDir", "=", "\"\<unset\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PDFsetmethod", "=", "\"\<unset\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PDFname", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"PDFDataDir", "=", "\"\<unset\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"datalistFile", "=", "\"\<unset\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"expttype", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"exptid", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"read", " ", "file"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"s", "=", 
+       RowBox[{"OpenRead", "[", 
+        RowBox[{"configDir", "<>", "configfilename"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"output", "=", 
+       RowBox[{"ReadList", "[", 
+        RowBox[{"s", ",", "String"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Close", "[", "s", "]"}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"if", " ", "read", " ", "tag"}], ",", " ", 
+        RowBox[{
+        "assign", " ", "the", " ", "first", " ", "word", " ", "of", " ", 
+         "that", " ", "line", " ", "to", " ", "arguments"}]}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"20170228", ":", " ", 
+         RowBox[{"for", " ", "mathematica", " ", "10.2"}]}], ",", " ", 
+        RowBox[{
+        "it", " ", "sseems", " ", "stringcontainsQ", " ", "does", " ", "not", 
+         " ", "work"}]}], "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Table", "[", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "runfunctag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"\"\<*\>\"", "<>", "runfunctag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"runfunc", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "figureDirtag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"\"\<*\>\"", "<>", "figureDirtag", "<>", "\"\<*\>\""}]}],
+             "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"figureDir", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "PDFsetDirtag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"\"\<*\>\"", "<>", "PDFsetDirtag", "<>", "\"\<*\>\""}]}],
+             "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"myPDFsetDir", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "PDFsetmethodtag"}], "]"}],
+            "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{
+             "\"\<*\>\"", "<>", "PDFsetmethodtag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"PDFsetmethod", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "PDFDataDirtag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{
+             "\"\<*\>\"", "<>", "PDFDataDirtag", "<>", "\"\<*\>\""}]}], "]"}],
+            ",", "\[IndentingNewLine]", 
+           RowBox[{"PDFDataDir", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "CorrDataDirtag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{
+             "\"\<*\>\"", "<>", "CorrDataDirtag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"CorrDataDir", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "PDFnametag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"\"\<*\>\"", "<>", "PDFnametag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"PDFname", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "datalistFiletag"}], "]"}],
+            "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{
+             "\"\<*\>\"", "<>", "datalistFiletag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"datalistFile", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", "\[IndentingNewLine]", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "expttypetag"}], "]"}], 
+           "\[IndentingNewLine]", "*)"}], 
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"\"\<*\>\"", "<>", "expttypetag", "<>", "\"\<*\>\""}]}], 
+            "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"expttype", "=", 
+            RowBox[{"Read", "[", 
+             RowBox[{
+              RowBox[{"StringToStream", "[", 
+               RowBox[{"output", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Word"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"read", " ", "exptid"}], ",", " ", 
+           RowBox[{
+           "assuming", " ", "there", " ", "are", " ", "several", " ", 
+            "exptids"}]}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{
+           "take", " ", "string", " ", "in", " ", "front", " ", "of", " ", 
+            "exptidtag"}], ",", " ", 
+           RowBox[{
+           "then", " ", "read", " ", "all", " ", "numbers", " ", "from", " ", 
+            "string"}]}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"If", "[", "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{"StringContainsQ", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "exptidtag"}], "]"}], 
+           "*)"}], 
+          RowBox[{
+           RowBox[{
+            RowBox[{"StringMatchQ", "[", 
+             RowBox[{
+              RowBox[{"output", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], ",", 
+              RowBox[{"\"\<*\>\"", "<>", "exptidtag", "<>", "\"\<*\>\""}]}], 
+             "]"}], " ", "&&", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"expttype", "\[Equal]", "\"\<single\>\""}], " ", "||", 
+              " ", 
+              RowBox[{"expttype", "\[Equal]", "\"\<multi\>\""}]}], ")"}]}], 
+           ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"exptidtmp", "=", 
+             RowBox[{"ReadList", "[", 
+              RowBox[{
+               RowBox[{"StringToStream", "[", 
+                RowBox[{"output", "[", 
+                 RowBox[{"[", "i", "]"}], "]"}], " ", "]"}], ",", "Record", 
+               ",", 
+               RowBox[{"RecordSeparators", "\[Rule]", "exptidtag"}]}], 
+              "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Length", "[", "exptidtmp", "]"}], "\[Equal]", "2"}], 
+              ",", 
+              RowBox[{"exptid", "=", 
+               RowBox[{"ReadList", "[", 
+                RowBox[{
+                 RowBox[{"StringToStream", "[", 
+                  RowBox[{"exptidtmp", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", 
+                 "Number"}], "]"}]}]}], " ", "]"}]}]}], 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"structure", " ", "is", " ", "like", " ", "exptid"}], 
+              "..."}], " ", "exptidtag", " ", "explanation"}], ",", " ", 
+            RowBox[{
+             RowBox[{"so", " ", "exptidtmp"}], " ", "=", " ", "2"}]}], " ", 
+           "*)"}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"don", "'"}], "t", " ", "need", " ", "to", " ", "set", 
+             " ", "exptid", " ", "if", " ", "expttype"}], " ", "=", " ", 
+            "All"}], ",", "ProtonNeutron"}], "*)"}], "\[IndentingNewLine]", 
+         "\"\<dummy\>\""}], "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "output", "]"}]}], "}"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{
+        "if", " ", "any", " ", "arguments", " ", "still", " ", "unset"}], ",",
+         " ", 
+        RowBox[{"return", " ", "error", " ", "message"}]}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"output", " ", "the", " ", "config", " ", "setting"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+       "runfunc", ",", "figureDir", ",", "myPDFsetDir", ",", "PDFsetmethod", 
+        ",", "PDFname", ",", "PDFDataDir", ",", "datalistFile", ",", 
+        "expttype", ",", "exptid"}], "}"}]}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.697305947038847*^9, {3.697306112455248*^9, 3.697306217276362*^9}, {
+   3.6973062801878757`*^9, 3.697306287329761*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.697324328399981*^9, 3.6973243361089277`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"configDir", "=", 
+     RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"configDir", "=", 
+      RowBox[{"DirectoryName", "[", "$InputFileName", "]"}]}], ";"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"configfilename", "=", "\"\<config1.txt\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "read", " ", "config", " ", "file", " ", "line", " ", "by", " ", "line", 
+     " ", "into", " ", "list"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"s", "=", 
+     RowBox[{"OpenRead", "[", 
+      RowBox[{"configDir", "<>", "configfilename"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"output", "=", 
+     RowBox[{"ReadList", "[", 
+      RowBox[{"s", ",", "String"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "output"}]}]], "Input",
+ CellChangeTimes->{{3.697324312375964*^9, 3.697324361713011*^9}, {
+  3.697328298847131*^9, 3.697328343764196*^9}, {3.6973298896491613`*^9, 
+  3.697329903163433*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"#Comment Sample configuration file for the online plotter of \
+CT14 data\"\>", ",", "\<\"#Comment 2\"\>", ",", "\<\"#Comment 3\"\>", 
+   ",", "\<\"#Comment 4\"\>", 
+   ",", "\<\"Job ID (copy from the counter file): 457\"\>", 
+   ",", "\<\"PDF set: CT14 NNLO\"\>", 
+   ",", "\<\"# Figures to plot (Bo Ting, describe what each figure \
+means)\"\>", ",", "\<\"Type:  1     2     3     4     5     6     7\"\>", 
+   ",", "\<\"Flag:  0     0     0     1     0     1     1\"\>", 
+   ",", "\<\"# Experiments to include (Bo Ting, write the names for each \
+experiment)\"\>", 
+   ",", "\<\"Expt. ID:   701   702   703   159   101   102   103   104   106  \
+ 108   109   110   111   124   125   126   127   147   201   203   204   225  \
+ 227   231   234   260   261   504   514   145   169   267   268   535   240  \
+ 241   281   265   266   538\"\>", 
+   ",", "\<\"Expt. Flag:  0     0     0     1     0     1     1     0     1   \
+  1     1     1     1     1     1     1     1     1     1     1     1     1   \
+  1     1     1     1     0     1     0     1     1     1     0     1     1   \
+  1     0     1     1     1  \"\>", 
+   ",", "\<\"#Functions to use in correlations (Bo Ting, describe what \
+functions mean)\"\>", 
+   ",", "\<\"Type:  bb   cb   sb     db    ub     g     u     d     s     c   \
+  b   user\"\>", 
+   ",", "\<\"Flag:  0     0     0     1     0     1     1     0     0     0   \
+  1     0\"\>", 
+   ",", "\<\"#User function parameters (provided through two 'paragraph' web \
+forms)\"\>", ",", "\<\"Name: sigma_Higgs (pb)\"\>", 
+   ",", "\<\"Values: 0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   \"\>", ",", "\<\"#x-Q figure parameters (input lines)\"\>", 
+   ",", "\<\"xmin,   xmax:  0.00001   1\"\>", 
+   ",", "\<\"mumin, mumax:      1,0 2000\"\>", 
+   ",", "\<\"#Histogram figure parameters (input lines)\"\>", 
+   ",", "\<\"Number of bins: auto\"\>", ",", "\<\"xmin, xmax: -3  3\"\>", 
+   ",", "\<\"ymin, ymax:  0 auto\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.697324362916482*^9, 3.697329807946851*^9, 
+  3.697339391832415*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"delete", " ", 
+    RowBox[{"comments", ":", " ", 
+     RowBox[{
+     "with", " ", "\"\<#\>\"", " ", "at", " ", "begining", " ", "of", " ", 
+      "line"}]}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output2", "=", 
+     RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Table", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringTake", "[", 
+          RowBox[{
+           RowBox[{"output", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", "1"}], "]"}], "\[NotEqual]", 
+         "\"\<#\>\""}], ",", 
+        RowBox[{"output2", "=", 
+         RowBox[{"Append", "[", 
+          RowBox[{"output2", ",", 
+           RowBox[{"output", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}], " ", "]"}]}]}], " ", "]"}], ";",
+       "\[IndentingNewLine]", "\"\<dummy\>\""}], "\[IndentingNewLine]", ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", 
+       RowBox[{"Length", "[", "output", "]"}]}], "}"}]}], 
+    "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.697329580154316*^9, 3.697329746818654*^9}, {
+  3.697329839817388*^9, 3.697329882183943*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", ",", "\<\"dummy\"\>", 
+   ",", "\<\"dummy\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.697329844250566*^9, 3.69733939578386*^9, 
+  3.697340663436088*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["output2"], "Input",
+ CellChangeTimes->{{3.697329727262793*^9, 3.697329727339075*^9}, 
+   3.697329767999975*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Job ID (copy from the counter file): 457\"\>", 
+   ",", "\<\"PDF set: CT14 NNLO\"\>", 
+   ",", "\<\"Type:  1     2     3     4     5     6     7\"\>", 
+   ",", "\<\"Flag:  0     0     0     1     0     1     1\"\>", 
+   ",", "\<\"Expt. ID:   701   702   703   159   101   102   103   104   106  \
+ 108   109   110   111   124   125   126   127   147   201   203   204   225  \
+ 227   231   234   260   261   504   514   145   169   267   268   535   240  \
+ 241   281   265   266   538\"\>", 
+   ",", "\<\"Expt. Flag:  0     0     0     1     0     1     1     0     1   \
+  1     1     1     1     1     1     1     1     1     1     1     1     1   \
+  1     1     1     1     0     1     0     1     1     1     0     1     1   \
+  1     0     1     1     1  \"\>", 
+   ",", "\<\"Type:  bb   cb   sb     db    ub     g     u     d     s     c   \
+  b   user\"\>", 
+   ",", "\<\"Flag:  0     0     0     1     0     1     1     0     0     0   \
+  1     0\"\>", ",", "\<\"Name: sigma_Higgs (pb)\"\>", 
+   ",", "\<\"Values: 0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   \"\>", ",", "\<\"xmin,   xmax:  0.00001   1\"\>", 
+   ",", "\<\"mumin, mumax:      1,0 2000\"\>", 
+   ",", "\<\"Number of bins: auto\"\>", ",", "\<\"xmin, xmax: -3  3\"\>", 
+   ",", "\<\"ymin, ymax:  0 auto\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.6973297283675013`*^9, {3.697329771513158*^9, 3.697329778012043*^9}, 
+   3.6973298180550537`*^9, 3.6973298502918177`*^9, 3.697339399204752*^9, 
+   3.697340669014979*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"output3", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"StringSplit", "[", 
+       RowBox[{
+        RowBox[{"output2", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], ",", "\"\<:\>\""}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", 
+        RowBox[{"Length", "[", "output2", "]"}]}], "}"}]}], "]"}]}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.6973283730060883`*^9, 3.697328383152313*^9}, {
+  3.6973284294091454`*^9, 3.697328436418097*^9}, {3.697329052063858*^9, 
+  3.6973290541681547`*^9}, {3.6973298284794083`*^9, 3.697329834862658*^9}, {
+  3.69732991254792*^9, 3.697329922352581*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\<\"Job ID (copy from the counter file)\"\>", 
+     ",", "\<\" 457\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"PDF set\"\>", ",", "\<\" CT14 NNLO\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Type\"\>", 
+     ",", "\<\"  1     2     3     4     5     6     7\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Flag\"\>", 
+     ",", "\<\"  0     0     0     1     0     1     1\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Expt. ID\"\>", 
+     ",", "\<\"   701   702   703   159   101   102   103   104   106   108   \
+109   110   111   124   125   126   127   147   201   203   204   225   227   \
+231   234   260   261   504   514   145   169   267   268   535   240   241   \
+281   265   266   538\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Expt. Flag\"\>", 
+     ",", "\<\"  0     0     0     1     0     1     1     0     1     1     \
+1     1     1     1     1     1     1     1     1     1     1     1     1     \
+1     1     1     0     1     0     1     1     1     0     1     1     1     \
+0     1     1     1  \"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Type\"\>", 
+     ",", "\<\"  bb   cb   sb     db    ub     g     u     d     s     c     \
+b   user\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Flag\"\>", 
+     ",", "\<\"  0     0     0     1     0     1     1     0     0     0     \
+1     0\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Name\"\>", ",", "\<\" sigma_Higgs (pb)\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Values\"\>", 
+     ",", "\<\" 0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   \"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"xmin,   xmax\"\>", ",", "\<\"  0.00001   1\"\>"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"mumin, mumax\"\>", ",", "\<\"      1,0 2000\"\>"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"Number of bins\"\>", ",", "\<\" auto\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"xmin, xmax\"\>", ",", "\<\" -3  3\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"ymin, ymax\"\>", ",", "\<\"  0 auto\"\>"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.697329924850562*^9, 3.6973406796610327`*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.697329064517486*^9, 3.697329066573394*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"JobidTag", "=", "\"\<Job ID (copy from the counter file)\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PDFnameTag", "=", "\"\<PDF set\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FigureTypeTag", "=", "\"\<Type\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FigureFlagTag", "=", "\"\<Flag\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExptidTypeTag", "=", "\"\<Expt. ID\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExptidFlagTag", "=", "\"\<Expt. Flag\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CorrelationArgTypeTag", "=", "\"\<Type\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CorrelationArgFlagTag", "=", "\"\<Flag\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UserArgNameTag", "=", "\"\<Name\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UserArgValueTag", "=", "\"\<Values\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XQfigureXrangeTag", "=", "\"\<xmin,   xmax\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XQfigureYrangeTag", "=", "\"\<mumin, mumax\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Hist1figureNbinTag", "=", "\"\<Number of bins\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Hist1figureXrangeTag", "=", "\"\<xmin, xmax\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Hist1figureYrangeTag", "=", "\"\<ymin, ymax\>\""}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", "\[IndentingNewLine]", 
+   RowBox[{
+   "Hist2figureXrangeTag", "\[IndentingNewLine]", "Hist2figureYrangeTag"}], 
+   "\[IndentingNewLine]", "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Jobid", "=", "\"\<unset\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PDFname", "=", "\"\<unset\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FigureType", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FigureFlag", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExptidType", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExptidFlag", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CorrelationArgType", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CorrelationArgFlag", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UserArgName", "=", "\"\<unset\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UserArgValue", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XQfigureXrange", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XQfigureYrange", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Hist1figureNbin", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Hist1figureXrange", "=", "\"\<unset\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Hist1figureYrange", "=", "\"\<unset\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "JobidTag", ",", "PDFnameTag", ",", "FigureTypeTag", ",", 
+      "FigureFlagTag", ",", "ExptidTypeTag", ",", "ExptidFlagTag", ",", 
+      "CorrelationArgTypeTag", ",", "CorrelationArgFlagTag", ",", 
+      "UserArgNameTag", ",", "UserArgValueTag", ",", "\[IndentingNewLine]", 
+      "XQfigureXrangeTag", ",", "XQfigureYrangeTag", ",", 
+      "Hist1figureNbinTag", ",", "Hist1figureXrangeTag", ",", 
+      "Hist1figureYrangeTag", ",", "\[IndentingNewLine]", "Jobid", ",", 
+      "PDFname", ",", "FigureType", ",", "FigureFlag", ",", "ExptidType", ",",
+       "ExptidFlag", ",", "CorrelationArgType", ",", "CorrelationArgFlag", 
+      ",", "UserArgName", ",", "UserArgValue", ",", "\[IndentingNewLine]", 
+      "XQfigureXrange", ",", "XQfigureYrange", ",", "Hist1figureNbin", ",", 
+      "Hist1figureXrange", ",", "Hist1figureYrange", ",", 
+      "\[IndentingNewLine]", "itag"}], "\[IndentingNewLine]", "}"}], ",", 
+    "\"\<dummy\>\""}], "]"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "Job", " ", "id"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"output3", "[", 
+  RowBox[{"[", "itag", "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "JobidTag"}], ",", 
+   RowBox[{
+    RowBox[{"Jobid", "=", 
+     RowBox[{"output3", "[", 
+      RowBox[{"[", 
+       RowBox[{"itag", ",", "2"}], "]"}], "]"}]}], ";", 
+    RowBox[{"Jobid", "=", 
+     RowBox[{"Read", "[", 
+      RowBox[{
+       RowBox[{"StringToStream", "[", "Jobid", "]"}], ",", "Number"}], 
+      "]"}]}]}]}], " ", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "Jobid", "]"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "PDFname"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "PDFnameTag"}], 
+   ",", 
+   RowBox[{"PDFname", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "PDFname", "]"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "FigureType", " ", "and", " ", "FigureFlag"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "FigureTypeTag"}],
+    ",", 
+   RowBox[{"FigureType", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "FigureType", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "FigureFlagTag"}],
+    ",", 
+   RowBox[{"FigureFlag", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "FigureFlag", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"FigureType", "=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+    RowBox[{"StringToStream", "[", "FigureType", "]"}], ",", "Number"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FigureFlag", "=", 
+   RowBox[{"ReadList", "[", 
+    RowBox[{
+     RowBox[{"StringToStream", "[", "FigureFlag", "]"}], ",", "Number"}], 
+    "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "ExptidType", " ", "and", " ", "ExptidFlag"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "ExptidTypeTag"}],
+    ",", 
+   RowBox[{"ExptidType", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "ExptidType", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "ExptidFlagTag"}],
+    ",", 
+   RowBox[{"ExptidFlag", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "ExptidFlag", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ExptidType", "=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+    RowBox[{"StringToStream", "[", "ExptidType", "]"}], ",", "Number"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExptidFlag", "=", 
+   RowBox[{"ReadList", "[", 
+    RowBox[{
+     RowBox[{"StringToStream", "[", "ExptidFlag", "]"}], ",", "Number"}], 
+    "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "read", " ", "CorrelationArgType", " ", "and", " ", "CorrelationArgFlag"}],
+    "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "CorrelationArgTypeTag"}], ",", 
+   RowBox[{"CorrelationArgType", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "CorrelationArgType", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "CorrelationArgFlagTag"}], ",", 
+   RowBox[{"CorrelationArgFlag", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "CorrelationArgFlag", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"CorrelationArgType", "=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+    RowBox[{"StringToStream", "[", "CorrelationArgType", "]"}], ",", "Word"}],
+    "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CorrelationArgFlag", "=", 
+   RowBox[{"ReadList", "[", 
+    RowBox[{
+     RowBox[{"StringToStream", "[", "CorrelationArgFlag", "]"}], ",", 
+     "Number"}], "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "UserArgName"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "UserArgNameTag"}], ",", 
+   RowBox[{"UserArgName", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "UserArgName", "]"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "UserArgValue"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "UserArgValueTag"}], ",", 
+   RowBox[{"UserArgValue", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "UserArgValue", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UserArgValue", "=", 
+   RowBox[{"ReadList", "[", 
+    RowBox[{
+     RowBox[{"StringToStream", "[", "UserArgValue", "]"}], ",", "Number"}], 
+    "]"}]}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"read", " ", "XQfigureXrange", " ", "and", " ", "XQfigureYrange"}],
+    "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "XQfigureXrangeTag"}], ",", 
+   RowBox[{"XQfigureXrange", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "XQfigureXrange", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "XQfigureYrangeTag"}], ",", 
+   RowBox[{"XQfigureYrange", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "XQfigureYrange", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"XQfigureXrange", "=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+    RowBox[{"StringToStream", "[", "XQfigureXrange", "]"}], ",", "Word"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"XQfigureYrange", "=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+    RowBox[{"StringToStream", "[", "XQfigureYrange", "]"}], ",", "Word"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"XQfigureXrange", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+   RowBox[{
+    RowBox[{"XQfigureXrange", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "=", 
+    RowBox[{"Read", "[", 
+     RowBox[{
+      RowBox[{"StringToStream", "[", 
+       RowBox[{"XQfigureXrange", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+     "]"}]}]}], " ", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"XQfigureXrange", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+   RowBox[{
+    RowBox[{"XQfigureXrange", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], "=", 
+    RowBox[{"Read", "[", 
+     RowBox[{
+      RowBox[{"StringToStream", "[", 
+       RowBox[{"XQfigureXrange", "[", 
+        RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+     "]"}]}]}], " ", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"XQfigureYrange", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+   RowBox[{
+    RowBox[{"XQfigureYrange", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "=", 
+    RowBox[{"Read", "[", 
+     RowBox[{
+      RowBox[{"StringToStream", "[", 
+       RowBox[{"XQfigureYrange", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+     "]"}]}]}], " ", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"XQfigureYrange", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+    RowBox[{
+     RowBox[{"XQfigureYrange", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], "=", 
+     RowBox[{"Read", "[", 
+      RowBox[{
+       RowBox[{"StringToStream", "[", 
+        RowBox[{"XQfigureYrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+      "]"}]}]}], " ", "]"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"read", " ", "Hist1figureNbin"}], ",", " ", "Hist1figureXrange", 
+    ",", " ", "Hist1figureYrange"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "Hist1figureNbinTag"}], ",", 
+   RowBox[{"Hist1figureNbin", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "Hist1figureNbin", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "Hist1figureXrangeTag"}], ",", 
+   RowBox[{"Hist1figureXrange", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "Hist1figureXrange", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"itag", "=", 
+   RowBox[{"itag", "+", "1"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+    "Hist1figureYrangeTag"}], ",", 
+   RowBox[{"Hist1figureYrange", "=", 
+    RowBox[{"output3", "[", 
+     RowBox[{"[", 
+      RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Head", "[", "Hist1figureYrange", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6973303684112177`*^9, 3.697330387173596*^9}, {
+   3.697331601306511*^9, 3.6973316822867327`*^9}, {3.697331734511002*^9, 
+   3.697331767625289*^9}, {3.69733193470479*^9, 3.697332011000108*^9}, {
+   3.697332189572873*^9, 3.6973322168345613`*^9}, 3.697332249626169*^9, {
+   3.6973322869455767`*^9, 3.697332308382071*^9}, 3.6973323426534*^9, {
+   3.6973324160730543`*^9, 3.697332477264316*^9}, {3.697332537654883*^9, 
+   3.697332548160706*^9}, {3.697332598222726*^9, 3.697332620288529*^9}, {
+   3.6973327481471*^9, 3.697332789379139*^9}, {3.697332861616725*^9, 
+   3.697333042780381*^9}, {3.697333091331273*^9, 3.697333149381061*^9}, {
+   3.697333211870653*^9, 3.6973332129836273`*^9}, {3.697333348556638*^9, 
+   3.697333369857752*^9}, {3.697333415202436*^9, 3.697333470945381*^9}, {
+   3.697333576026476*^9, 3.697333579699844*^9}, {3.697333649186043*^9, 
+   3.6973339474512987`*^9}, {3.697334081069923*^9, 3.6973340904274883`*^9}, {
+   3.6973341285680723`*^9, 3.697334178564432*^9}, {3.6973357626517143`*^9, 
+   3.697335823144635*^9}, {3.697335977265094*^9, 3.697336052667441*^9}, {
+   3.697336086897093*^9, 3.697336336464078*^9}, {3.697336414814431*^9, 
+   3.697336426510969*^9}, {3.6973366634780903`*^9, 3.697336706222837*^9}, {
+   3.697338962708928*^9, 3.697339082095042*^9}, {3.6973391558176317`*^9, 
+   3.6973392587930727`*^9}, {3.697340273331778*^9, 3.697340500971428*^9}, {
+   3.697340574870162*^9, 3.697340581093193*^9}, {3.6973407749833717`*^9, 
+   3.697340790791129*^9}, {3.697340838688719*^9, 3.697340884087022*^9}, {
+   3.697340922701741*^9, 3.697340924751851*^9}, {3.697341267666795*^9, 
+   3.69734138929146*^9}, {3.697341552238757*^9, 3.697341760851286*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Job ID (copy from the counter file)\"\>", 
+   ",", "\<\" 457\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341400983013*^9}],
+
+Cell[BoxData["457"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414009877243`*^9}],
+
+Cell[BoxData["\<\" CT14 NNLO\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341400991537*^9}],
+
+Cell[BoxData["\<\"  1     2     3     4     5     6     7\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341400995348*^9}],
+
+Cell[BoxData["\<\"  0     0     0     1     0     1     1\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341400999016*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010017443`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401003889*^9}],
+
+Cell[BoxData["\<\"   701   702   703   159   101   102   103   104   106   \
+108   109   110   111   124   125   126   127   147   201   203   204   225   \
+227   231   234   260   261   504   514   145   169   267   268   535   240   \
+241   281   265   266   538\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401006029*^9}],
+
+Cell[BoxData["\<\"  0     0     0     1     0     1     1     0     1     1   \
+  1     1     1     1     1     1     1     1     1     1     1     1     1   \
+  1     1     1     0     1     0     1     1     1     0     1     1     1   \
+  0     1     1     1  \"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401008624*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "701", ",", "702", ",", "703", ",", "159", ",", "101", ",", "102", ",", 
+   "103", ",", "104", ",", "106", ",", "108", ",", "109", ",", "110", ",", 
+   "111", ",", "124", ",", "125", ",", "126", ",", "127", ",", "147", ",", 
+   "201", ",", "203", ",", "204", ",", "225", ",", "227", ",", "231", ",", 
+   "234", ",", "260", ",", "261", ",", "504", ",", "514", ",", "145", ",", 
+   "169", ",", "267", ",", "268", ",", "535", ",", "240", ",", "241", ",", 
+   "281", ",", "265", ",", "266", ",", "538"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401011097*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1", ",", "0", 
+   ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", 
+   "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", 
+   ",", "1", ",", "1", ",", "1", ",", "0", ",", "1", ",", "0", ",", "1", ",", 
+   "1", ",", "1", ",", "0", ",", "1", ",", "1", ",", "1", ",", "0", ",", "1", 
+   ",", "1", ",", "1"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401013311*^9}],
+
+Cell[BoxData["\<\"  bb   cb   sb     db    ub     g     u     d     s     c   \
+  b   user\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010152817`*^9}],
+
+Cell[BoxData["\<\"  0     0     0     1     0     1     1     0     0     0   \
+  1     0\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401017413*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"bb\"\>", ",", "\<\"cb\"\>", ",", "\<\"sb\"\>", 
+   ",", "\<\"db\"\>", ",", "\<\"ub\"\>", ",", "\<\"g\"\>", ",", "\<\"u\"\>", 
+   ",", "\<\"d\"\>", ",", "\<\"s\"\>", ",", "\<\"c\"\>", ",", "\<\"b\"\>", 
+   ",", "\<\"user\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401019574*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1", ",", "0", 
+   ",", "0", ",", "0", ",", "1", ",", "0"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401021943*^9}],
+
+Cell[BoxData["\<\" sigma_Higgs (pb)\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010239067`*^9}],
+
+Cell[BoxData["\<\" 0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   \
+0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012   0.012 \
+  0.012   0.012   \"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010265093`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+   "0.012`", ",", "0.012`"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401030593*^9}],
+
+Cell[BoxData["\<\"  0.00001   1\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010346603`*^9}],
+
+Cell[BoxData["\<\"      1,0 2000\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010383587`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"0.00001\"\>", ",", "\<\"1\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401041902*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"1,0\"\>", ",", "\<\"2000\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401045004*^9}],
+
+Cell[BoxData["0.00001`"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401047883*^9}],
+
+Cell[BoxData["1"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.69734140104989*^9}],
+
+Cell[BoxData["1"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.6973414010516443`*^9}],
+
+Cell[BoxData["2000"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401053316*^9}],
+
+Cell[BoxData["\<\" auto\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401054966*^9}],
+
+Cell[BoxData["\<\" -3  3\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401056726*^9}],
+
+Cell[BoxData["\<\"  0 auto\"\>"], "Output",
+ CellChangeTimes->{
+  3.697330390256538*^9, {3.6973319945703573`*^9, 3.697332011543138*^9}, 
+   3.697332196613255*^9, {3.697335797827561*^9, 3.697335824451893*^9}, 
+   3.697336092253942*^9, 3.697336249818392*^9, 3.6973363374853487`*^9, 
+   3.6973365115295687`*^9, 3.6973367087977867`*^9, 3.69733908361406*^9, 
+   3.697339260800414*^9, 3.697339364605027*^9, 3.6973404266421022`*^9, 
+   3.6973405157383833`*^9, 3.697340591462082*^9, 3.697340683491881*^9, 
+   3.69734131644526*^9, 3.697341401058467*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"(*", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"set", " ", "tag", " ", "of", " ", "arguments"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"PDFnametag", "=", "\"\<PDF set:\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Figuretypetag", "=", "\"\<Flag:\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Figuretypeflagtag", "=", "\"\<Flag:\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"exptidtag", "=", "\"\<Expt. Flag:\>\""}], ";", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"runfunctag", "=", "\"\< = runfunc !\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"figureDirtag", "=", "\"\< = figureDirtag !\>\""}], ";", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"PDFsetDirtag", "=", "\"\< = PDFsetDir !\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"PDFsetmethodtag", "=", "\"\< = PDFsetmethod !\>\""}], ";", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"PDFDataDirtag", "=", "\"\< = PDFDataDir !\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"CorrDataDirtag", "=", "\"\< = CorrDataDir !\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"PDFnametag", "=", "\"\<PDF set:\>\""}], ";", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"datalistFiletag", "=", "\"\< = datalist !\>\""}], ";", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"expttypetag", "=", "\"\< = expttype !\>\""}], ";", 
+   "\[IndentingNewLine]", 
+   RowBox[{"exptidtag", "=", "\"\< = exptid !\>\""}], ";"}], 
+  "\[IndentingNewLine]", "*)"}]], "Input",
+ CellChangeTimes->{{3.697329108974565*^9, 3.697329115147703*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"a", "=", "\"\<5.34\>\""}], "\[IndentingNewLine]", 
+ RowBox[{"Head", "[", "a", "]"}]}], "Input",
+ CellChangeTimes->{{3.697340959558351*^9, 3.6973409672415133`*^9}, {
+  3.697341091167136*^9, 3.697341093972906*^9}}],
+
+Cell[BoxData["\<\"5.34\"\>"], "Output",
+ CellChangeTimes->{
+  3.6973409679504967`*^9, {3.697341065686051*^9, 3.697341094899068*^9}}],
+
+Cell[BoxData["String"], "Output",
+ CellChangeTimes->{
+  3.6973409679504967`*^9, {3.697341065686051*^9, 3.697341094902926*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Apply", "[", 
+  RowBox[{"Number", ",", "a"}], "]"}]], "Input",
+ CellChangeTimes->{{3.697340969546879*^9, 3.697341023237299*^9}, {
+  3.69734106207404*^9, 3.6973410708759117`*^9}, {3.69734110377767*^9, 
+  3.697341104056938*^9}}],
+
+Cell[BoxData["\<\"5.34\"\>"], "Output",
+ CellChangeTimes->{{3.697340972502328*^9, 3.6973409840036707`*^9}, {
+  3.697341015222947*^9, 3.697341023933723*^9}, {3.6973410774795427`*^9, 
+  3.697341105314707*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Head", "[", 
+  RowBox[{"Apply", "[", 
+   RowBox[{"Number", ",", "a"}], "]"}], " ", "]"}]], "Input",
+ CellChangeTimes->{{3.697341079742649*^9, 3.697341082356443*^9}, {
+  3.6973411160359173`*^9, 3.6973411171245604`*^9}}],
+
+Cell[BoxData["String"], "Output",
+ CellChangeTimes->{3.697341082784402*^9, 3.697341117713872*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"readcorrconfigfile3", "[", 
+   RowBox[{"configDirin_", ",", "configfilenamein_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"configDir", "=", "configDirin"}], ",", 
+      RowBox[{"configfilename", "=", "configfilenamein"}], ",", 
+      "\[IndentingNewLine]", "JobidTag", ",", "PDFnameTag", ",", 
+      "FigureTypeTag", ",", "FigureFlagTag", ",", "ExptidTypeTag", ",", 
+      "ExptidFlagTag", ",", "CorrelationArgTypeTag", ",", 
+      "CorrelationArgFlagTag", ",", "UserArgNameTag", ",", "UserArgValueTag", 
+      ",", "\[IndentingNewLine]", "XQfigureXrangeTag", ",", 
+      "XQfigureYrangeTag", ",", "Hist1figureNbinTag", ",", 
+      "Hist1figureXrangeTag", ",", "Hist1figureYrangeTag", ",", 
+      "\[IndentingNewLine]", "Jobid", ",", "PDFname", ",", "FigureType", ",", 
+      "FigureFlag", ",", "ExptidType", ",", "ExptidFlag", ",", 
+      "CorrelationArgType", ",", "CorrelationArgFlag", ",", "UserArgName", 
+      ",", "UserArgValue", ",", "\[IndentingNewLine]", "XQfigureXrange", ",", 
+      "XQfigureYrange", ",", "Hist1figureNbin", ",", "Hist1figureXrange", ",",
+       "Hist1figureYrange", ",", "\[IndentingNewLine]", "itag", ",", "s", ",",
+       "output", ",", "output2", ",", "output3"}], "\[IndentingNewLine]", 
+     "}"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"JobidTag", "=", "\"\<Job ID (copy from the counter file)\>\""}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"PDFnameTag", "=", "\"\<PDF set\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"FigureTypeTag", "=", "\"\<Type\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"FigureFlagTag", "=", "\"\<Flag\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ExptidTypeTag", "=", "\"\<Expt. ID\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ExptidFlagTag", "=", "\"\<Expt. Flag\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgTypeTag", "=", "\"\<Type\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgFlagTag", "=", "\"\<Flag\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"UserArgNameTag", "=", "\"\<Name\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"UserArgValueTag", "=", "\"\<Values\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"XQfigureXrangeTag", "=", "\"\<xmin,   xmax\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"XQfigureYrangeTag", "=", "\"\<mumin, mumax\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureNbinTag", "=", "\"\<Number of bins\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureXrangeTag", "=", "\"\<xmin, xmax\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureYrangeTag", "=", "\"\<ymin, ymax\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", "\[IndentingNewLine]", 
+      RowBox[{
+      "Hist2figureXrangeTag", "\[IndentingNewLine]", "Hist2figureYrangeTag"}],
+       "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Jobid", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"PDFname", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"FigureType", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"FigureFlag", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ExptidType", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ExptidFlag", "=", "\"\<unset\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgType", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgFlag", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"UserArgName", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"UserArgValue", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"XQfigureXrange", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"XQfigureYrange", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureNbin", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureXrange", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureYrange", "=", "\"\<unset\>\""}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "read", " ", "config", " ", "file", " ", "line", " ", "by", " ", "line",
+        " ", "into", " ", "list"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"s", "=", 
+      RowBox[{"OpenRead", "[", 
+       RowBox[{"configDir", "<>", "configfilename"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"output", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{"s", ",", "String"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Close", "[", "s", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"delete", " ", 
+       RowBox[{"comments", ":", " ", 
+        RowBox[{
+        "with", " ", "\"\<#\>\"", " ", "at", " ", "begining", " ", "of", " ", 
+         "line"}]}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"output2", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"StringTake", "[", 
+            RowBox[{
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", "1"}], "]"}], 
+           "\[NotEqual]", "\"\<#\>\""}], ",", 
+          RowBox[{"output2", "=", 
+           RowBox[{"Append", "[", 
+            RowBox[{"output2", ",", 
+             RowBox[{"output", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], " ", "]"}]}]}], " ", "]"}], 
+        ";", "\[IndentingNewLine]", "\"\<dummy\>\""}], "\[IndentingNewLine]", 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "output", "]"}]}], "}"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "seperate", " ", "the", " ", "tag", " ", "of", " ", "configure", " ", 
+       "file", " ", "and", " ", "arguments", " ", "by", " ", "\"\<:\>\""}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"output3", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"StringSplit", "[", 
+         RowBox[{
+          RowBox[{"output2", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", "\"\<:\>\""}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "output2", "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"check", " ", "tag", " ", "exist"}], ",", " ", 
+       RowBox[{"if", " ", "a", " ", "tag", " ", "exist"}], ",", " ", 
+       RowBox[{
+       "read", " ", "arguments", " ", "corresponding", " ", "to", " ", "that",
+         " ", "tag"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "Job", " ", "id"}], "*)"}], "\[IndentingNewLine]", 
+     
+     RowBox[{"itag", "=", "1"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", "JobidTag"}], 
+       ",", 
+       RowBox[{
+        RowBox[{"Jobid", "=", 
+         RowBox[{"output3", "[", 
+          RowBox[{"[", 
+           RowBox[{"itag", ",", "2"}], "]"}], "]"}]}], ";", 
+        RowBox[{"Jobid", "=", 
+         RowBox[{"Read", "[", 
+          RowBox[{
+           RowBox[{"StringToStream", "[", "Jobid", "]"}], ",", "Number"}], 
+          "]"}]}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "Jobid", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "PDFname"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "PDFnameTag"}], ",", 
+       RowBox[{"PDFname", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "PDFname", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "FigureType", " ", "and", " ", "FigureFlag"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "FigureTypeTag"}], ",", 
+       RowBox[{"FigureType", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "FigureType", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "FigureFlagTag"}], ",", 
+       RowBox[{"FigureFlag", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "FigureFlag", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"FigureType", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "FigureType", "]"}], ",", "Number"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"FigureFlag", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "FigureFlag", "]"}], ",", "Number"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "ExptidType", " ", "and", " ", "ExptidFlag"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "ExptidTypeTag"}], ",", 
+       RowBox[{"ExptidType", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "ExptidType", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "ExptidFlagTag"}], ",", 
+       RowBox[{"ExptidFlag", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "ExptidFlag", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ExptidType", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "ExptidType", "]"}], ",", "Number"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ExptidFlag", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "ExptidFlag", "]"}], ",", "Number"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "read", " ", "CorrelationArgType", " ", "and", " ", 
+       "CorrelationArgFlag"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "CorrelationArgTypeTag"}], ",", 
+       RowBox[{"CorrelationArgType", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "CorrelationArgType", "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "CorrelationArgFlagTag"}], ",", 
+       RowBox[{"CorrelationArgFlag", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "CorrelationArgFlag", "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgType", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "CorrelationArgType", "]"}], ",", 
+        "Word"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"CorrelationArgFlag", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "CorrelationArgFlag", "]"}], ",", 
+        "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "UserArgName"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "UserArgNameTag"}], ",", 
+       RowBox[{"UserArgName", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "UserArgName", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"read", " ", "UserArgValue"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "UserArgValueTag"}], ",", 
+       RowBox[{"UserArgValue", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "UserArgValue", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"UserArgValue", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "UserArgValue", "]"}], ",", "Number"}],
+        "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "read", " ", "XQfigureXrange", " ", "and", " ", "XQfigureYrange"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "XQfigureXrangeTag"}], ",", 
+       RowBox[{"XQfigureXrange", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "XQfigureXrange", "]"}], ";", "\[IndentingNewLine]",
+      "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "XQfigureYrangeTag"}], ",", 
+       RowBox[{"XQfigureYrange", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "XQfigureYrange", "]"}], ";", "\[IndentingNewLine]",
+      "\[IndentingNewLine]", 
+     RowBox[{"XQfigureXrange", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "XQfigureXrange", "]"}], ",", "Word"}],
+        "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"XQfigureYrange", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "XQfigureYrange", "]"}], ",", "Word"}],
+        "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"XQfigureXrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"XQfigureXrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"XQfigureXrange", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"XQfigureXrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"XQfigureXrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"XQfigureXrange", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"XQfigureYrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"XQfigureYrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"XQfigureYrange", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"XQfigureYrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"XQfigureYrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"XQfigureYrange", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"read", " ", "Hist1figureNbin"}], ",", " ", 
+       "Hist1figureXrange", ",", " ", "Hist1figureYrange"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "Hist1figureNbinTag"}], ",", 
+       RowBox[{"Hist1figureNbin", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "Hist1figureNbin", "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "Hist1figureXrangeTag"}], ",", 
+       RowBox[{"Hist1figureXrange", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "Hist1figureXrange", "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"itag", "=", 
+      RowBox[{"itag", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "1"}], "]"}], "]"}], "\[Equal]", 
+        "Hist1figureYrangeTag"}], ",", 
+       RowBox[{"Hist1figureYrange", "=", 
+        RowBox[{"output3", "[", 
+         RowBox[{"[", 
+          RowBox[{"itag", ",", "2"}], "]"}], "]"}]}]}], " ", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Head", "[", "Hist1figureYrange", "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureXrange", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "Hist1figureXrange", "]"}], ",", 
+        "Word"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Hist1figureYrange", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"StringToStream", "[", "Hist1figureYrange", "]"}], ",", 
+        "Word"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Hist1figureXrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"Hist1figureXrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"Hist1figureXrange", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Hist1figureXrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"Hist1figureXrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"Hist1figureXrange", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Hist1figureYrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"Hist1figureYrange", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"Hist1figureYrange", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Hist1figureYrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "\[NotEqual]", "\"\<auto\>\""}], ",", 
+       RowBox[{
+        RowBox[{"Hist1figureYrange", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "=", 
+        RowBox[{"Read", "[", 
+         RowBox[{
+          RowBox[{"StringToStream", "[", 
+           RowBox[{"Hist1figureYrange", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], " ", "]"}], ",", "Number"}], 
+         "]"}]}]}], " ", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "\"\<dummy\>\"", ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "Jobid", ",", "PDFname", ",", "FigureType", ",", "FigureFlag", ",", 
+       "ExptidType", ",", "ExptidFlag", ",", "CorrelationArgType", ",", 
+       "CorrelationArgFlag", ",", "UserArgName", ",", "UserArgValue", ",", 
+       "\[IndentingNewLine]", "XQfigureXrange", ",", "XQfigureYrange", ",", 
+       "Hist1figureNbin", ",", "Hist1figureXrange", ",", 
+       "Hist1figureYrange"}], "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.697341845618844*^9, 3.697341914185882*^9}, {
+  3.6973420251717987`*^9, 3.697342103624545*^9}, {3.697342135507613*^9, 
+  3.697342199939868*^9}, {3.6973422496566753`*^9, 3.697342371977275*^9}, {
+  3.6973424036293488`*^9, 3.69734241051731*^9}, {3.697342669495419*^9, 
+  3.697342670708734*^9}, {3.697342707070108*^9, 3.6973427432158527`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"configDir", "=", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"configDir", "=", 
+     RowBox[{"DirectoryName", "[", "$InputFileName", "]"}]}], ";"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"configfilename", "=", "\"\<config1.txt\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{3.6973420182796097`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"readcorrconfigfile3", "[", 
+  RowBox[{"configDir", ",", "configfilename"}], "]"}]], "Input",
+ CellChangeTimes->{{3.697342436342148*^9, 3.697342438932537*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"457", ",", "\<\" CT14 NNLO\"\>", ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7"}],
+     "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1"}],
+     "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "701", ",", "702", ",", "703", ",", "159", ",", "101", ",", "102", ",", 
+     "103", ",", "104", ",", "106", ",", "108", ",", "109", ",", "110", ",", 
+     "111", ",", "124", ",", "125", ",", "126", ",", "127", ",", "147", ",", 
+     "201", ",", "203", ",", "204", ",", "225", ",", "227", ",", "231", ",", 
+     "234", ",", "260", ",", "261", ",", "504", ",", "514", ",", "145", ",", 
+     "169", ",", "267", ",", "268", ",", "535", ",", "240", ",", "241", ",", 
+     "281", ",", "265", ",", "266", ",", "538"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1", ",", "0",
+      ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", 
+     ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", ",", "1", 
+     ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", "1", ",", "0", 
+     ",", "1", ",", "1", ",", "1", ",", "0", ",", "1", ",", "1", ",", "1", 
+     ",", "0", ",", "1", ",", "1", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bb\"\>", ",", "\<\"cb\"\>", ",", "\<\"sb\"\>", 
+     ",", "\<\"db\"\>", ",", "\<\"ub\"\>", ",", "\<\"g\"\>", ",", "\<\"u\"\>",
+      ",", "\<\"d\"\>", ",", "\<\"s\"\>", ",", "\<\"c\"\>", ",", "\<\"b\"\>", 
+     ",", "\<\"user\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", ",", "1", ",", "0",
+      ",", "0", ",", "0", ",", "1", ",", "0"}], "}"}], 
+   ",", "\<\" sigma_Higgs (pb)\"\>", ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",",
+      "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+     "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+     "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+     "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+     "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", 
+     "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", ",", "0.012`", 
+     ",", "0.012`", ",", "0.012`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.00001`", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2000"}], "}"}], ",", "\<\" auto\"\>", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "\<\"auto\"\>"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.697342456450582*^9, 3.697342753144804*^9}]
+}, Open  ]]
+},
+WindowSize->{1535, 848},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 21245, 479, 3226, "Input"],
+Cell[21806, 501, 94, 1, 30, "Input"],
+Cell[CellGroupData[{
+Cell[21925, 506, 1267, 34, 243, "Input"],
+Cell[23195, 542, 2518, 41, 307, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25750, 588, 1304, 34, 208, "Input"],
+Cell[27057, 624, 723, 12, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27817, 641, 125, 2, 32, "Input"],
+Cell[27945, 645, 1962, 31, 227, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29944, 681, 716, 17, 75, "Input"],
+Cell[30663, 700, 2675, 58, 251, "Output"]
+}, Open  ]],
+Cell[33353, 761, 92, 1, 30, "Input"],
+Cell[CellGroupData[{
+Cell[33470, 766, 19688, 554, 2706, "Input"],
+Cell[53161, 1322, 631, 11, 32, "Output"],
+Cell[53795, 1335, 533, 8, 30, "Output"],
+Cell[54331, 1345, 546, 8, 30, "Output"],
+Cell[54880, 1355, 575, 8, 30, "Output"],
+Cell[55458, 1365, 575, 8, 30, "Output"],
+Cell[56036, 1375, 629, 11, 32, "Output"],
+Cell[56668, 1388, 627, 11, 32, "Output"],
+Cell[57298, 1401, 782, 11, 50, "Output"],
+Cell[58083, 1414, 781, 11, 50, "Output"],
+Cell[58867, 1427, 1061, 17, 52, "Output"],
+Cell[59931, 1446, 977, 16, 32, "Output"],
+Cell[60911, 1464, 610, 9, 32, "Output"],
+Cell[61524, 1475, 607, 9, 30, "Output"],
+Cell[62134, 1486, 790, 13, 32, "Output"],
+Cell[62927, 1501, 681, 12, 32, "Output"],
+Cell[63611, 1515, 555, 8, 32, "Output"],
+Cell[64169, 1525, 1007, 14, 69, "Output"],
+Cell[65179, 1541, 1456, 22, 71, "Output"],
+Cell[66638, 1565, 551, 8, 30, "Output"],
+Cell[67192, 1575, 552, 8, 30, "Output"],
+Cell[67747, 1585, 596, 10, 32, "Output"],
+Cell[68346, 1597, 595, 10, 32, "Output"],
+Cell[68944, 1609, 536, 8, 30, "Output"],
+Cell[69483, 1619, 528, 8, 30, "Output"],
+Cell[70014, 1629, 531, 8, 30, "Output"],
+Cell[70548, 1639, 532, 8, 30, "Output"],
+Cell[71083, 1649, 541, 8, 30, "Output"],
+Cell[71627, 1659, 542, 8, 30, "Output"],
+Cell[72172, 1669, 544, 8, 30, "Output"]
+}, Open  ]],
+Cell[72731, 1680, 1648, 34, 447, "Input"],
+Cell[CellGroupData[{
+Cell[74404, 1718, 237, 4, 51, "Input"],
+Cell[74644, 1724, 132, 2, 30, "Output"],
+Cell[74779, 1728, 126, 2, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[74942, 1735, 250, 5, 32, "Input"],
+Cell[75195, 1742, 207, 3, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75439, 1750, 242, 5, 32, "Input"],
+Cell[75684, 1757, 97, 1, 32, "Output"]
+}, Open  ]],
+Cell[75796, 1761, 25265, 604, 3369, "Input"],
+Cell[101064, 2367, 503, 14, 115, "Input"],
+Cell[CellGroupData[{
+Cell[101592, 2385, 182, 3, 35, "Input"],
+Cell[101777, 2390, 3178, 60, 208, "Output"]
+}, Open  ]]
+}
+]
+*)
+

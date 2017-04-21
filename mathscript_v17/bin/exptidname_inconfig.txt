@@ -1,0 +1,40 @@
+701  fkH0a7
+702  fkH0a8
+703  fkH0a14
+159  HERA1X0
+101  BcdF2pCor
+102  BcdF2dCor
+103  NmcF2pCor   ***(not in CT14NNLO)
+104  NmcRatCor
+106  NmcX0pCor
+108  cdhswf2
+109  cdhswf3
+110  ccfrf2.mi
+111  ccfrf3.md
+124  NuTvNuChXN
+125  NuTvNbChXN
+126  CcfrNuChXN
+127  CcfrNbChXN
+147  Hn1X0c
+201  e605
+203  e866f
+204  e866ppxf
+225  cdfLasy
+227  cdfLasy2
+231  d02Easy1   ***(not in CT14NNLO)
+234  d02Masy1
+260  ZyD02a
+261  ZyCDF2
+504  cdf2jtCor2
+514  d02jtCor2
+145  Hn+9900x0b
+169  H1FL10
+267  CMS7Easy   
+268  ATL7_WZ
+535  ATL7jtR6
+240  LHCb7_WZ1
+241  LHCb7Wasy1
+281  d02Easy5
+265  CMS7Masy1   ***(not in CT14NNLO)
+266  CMS7Masy2
+538  CMS7jtR7

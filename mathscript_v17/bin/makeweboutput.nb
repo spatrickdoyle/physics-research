@@ -1,0 +1,375 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14278,        367]
+NotebookOptionsPosition[     13326,        330]
+NotebookOutlinePosition[     13659,        345]
+CellTagsIndexPosition[     13616,        342]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"for", " ", "arguments", " ", "which", " ", "we", " ", 
+     RowBox[{"don", "'"}], "t", " ", "want", " ", "not", " ", "show", " ", 
+     "on", " ", "web", " ", "version"}], ",", " ", 
+    RowBox[{
+    "we", " ", "setup", " ", "them", " ", "is", " ", "web", " ", "version", 
+     " ", "mathematica", " ", "as", " ", "internal", " ", "variable"}]}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"datalistFile", "=", "\"\<./dat16lisformathematica\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"expttype", "=", "\"\<multi\>\""}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"exptid", ";"}], 
+   RowBox[{"(*", 
+    RowBox[{"it", " ", "will", " ", "equal", " ", "to", " ", "exptlist"}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"figureDir", "=", "\"\<../plots/\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PDFname", "=", "\"\<CT14NNLO\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"save", " ", "to", " ", "eps"}], ",", " ", 
+     RowBox[{"png", " ", "and", " ", "pdf", " ", "file"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"**", "**", "**", "**", "**", "**", "**"}], "*******)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"save", " ", "figure", " ", "files", " ", "into", " ", 
+     RowBox[{
+     "saveparentpath", "<>", "pdfnameexpttypeDir", "<>", "exptidDir"}], " ", 
+     "or", " ", 
+     RowBox[{"saveparentpath", "<>", "jobpath"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"set", " ", "dir", " ", "for", " ", "saved", " ", "figures"}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"saveparentpath", "=", "figureDir"}], ";"}], 
+   RowBox[{
+   "(*", "\"\</home/botingw/code/pdf_correlation/code/mathematica/\>\"", 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"make", " ", "name", " ", "of", " ", "subdir", 
+     RowBox[{"(", "s", ")"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"pdfnameexpttypeDir", "=", 
+     RowBox[{
+     "PDFname", "<>", "\"\<_\>\"", "<>", "expttype", "<>", "\"\</\>\""}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"20170313", ":", " ", 
+     RowBox[{"use", " ", "job", " ", "dir"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"jobpath", "=", 
+     RowBox[{"\"\<Jobs/\>\"", "<>", 
+      RowBox[{"ToString", "[", "Jobid", "]"}], "<>", "\"\</\>\""}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"set", " ", "observables"}], ",", " ", 
+     RowBox[{"different", " ", "kinds", " ", "of", " ", "plot"}], ",", " ", 
+     RowBox[{
+     "available", " ", "extension", " ", "of", " ", "output", " ", 
+      "files"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"obsname", "=", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<xQbyexpt\>\"", ",", "\"\<expt_error_ratio\>\"", ",", 
+       "\"\<residue\>\"", ",", "\"\<dr\>\"", ",", "\"\<corrdr\>\"", ",", 
+       "\"\<corr\>\""}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"representationname", "=", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<xQ\>\"", ",", "\"\<legend\>\"", ",", "\"\<hist1\>\"", ",", 
+       "\"\<hist2\>\""}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"extensionname", "=", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<.eps\>\"", ",", "\"\<.png\>\"", ",", "\"\<.pdf\>\"", ",", 
+       "\"\<.jpg\>\""}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"iext", "=", "2"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{"export", " ", "jpg"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"imgresol", "=", "72"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{"image", " ", "resolution"}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"flavour", "=", "0"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"filename", "=", 
+     RowBox[{
+      RowBox[{"obsname", "[", 
+       RowBox[{"[", "6", "]"}], "]"}], "<>", "\"\<_\>\"", "<>", 
+      RowBox[{"representationname", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "<>", "\"\<_\>\"", "<>", "\"\<f\>\"", "<>", 
+      RowBox[{"ToString", "[", "flavour", "]"}], "<>", 
+      RowBox[{"extensionname", "[", 
+       RowBox[{"[", "iext", "]"}], "]"}]}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.700501605968091*^9, 3.700501606992662*^9}, {
+  3.700501671688755*^9, 3.700501672760976*^9}, {3.700510455546741*^9, 
+  3.700510456407291*^9}, {3.700510512923629*^9, 3.700510530437289*^9}, {
+  3.700510647632246*^9, 3.700510651615024*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{"filename", "\[IndentingNewLine]", 
+ RowBox[{"saveparentpath", "<>", "jobpath", "<>", "filename"}]}], "Input",
+ CellChangeTimes->{{3.700510689354918*^9, 3.700510693900489*^9}}],
+
+Cell[BoxData["\<\"corr_xQ_f0.png\"\>"], "Output",
+ CellChangeTimes->{3.7005105384105186`*^9, 3.700510655917927*^9, 
+  3.7005106947891808`*^9}],
+
+Cell[BoxData["\<\"../plots/Jobs/Jobid/corr_xQ_f0.png\"\>"], "Output",
+ CellChangeTimes->{3.7005105384105186`*^9, 3.700510655917927*^9, 
+  3.700510694790102*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"plotswebpage", "=", "\[IndentingNewLine]", 
+  "\"\<<img src=\\\"corrdr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:700px;\\\">\n<img src=\\\"corrdr_legend_f0.png\\\" \
+alt=\\\"Mountain View\\\" style=\\\"width:600px;height:500px;\\\">\n<br>\n\
+<img src=\\\"corrdr_hist1_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:578px;\\\">\n<img src=\\\"corrdr_hist2_f0.png\\\" \
+alt=\\\"Mountain View\\\" style=\\\"width:578px;\\\">\n<br>\>\""}]], "Input",
+ CellChangeTimes->{{3.700510949857147*^9, 3.700510990195958*^9}, {
+  3.7005110201962337`*^9, 3.7005111289419003`*^9}}],
+
+Cell[BoxData["\<\"<img src=\\\"corrdr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:700px;\\\">\\n<img src=\\\"corrdr_legend_f0.png\\\" \
+alt=\\\"Mountain View\\\" \
+style=\\\"width:600px;height:500px;\\\">\\n<br>\\n<img \
+src=\\\"corrdr_hist1_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:578px;\\\">\\n<img src=\\\"corrdr_hist2_f0.png\\\" \
+alt=\\\"Mountain View\\\" style=\\\"width:578px;\\\">\\n<br>\"\>"], "Output",
+ CellChangeTimes->{3.7005781762471523`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"makeplottext", "[", 
+   RowBox[{"plotfilein_", ",", "pxwidthin_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"plotfile", "=", "plotfilein"}], ",", 
+      RowBox[{"pxwidth", "=", "pxwidthin"}], ",", "tmptext", ",", "output"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "tmptext", "=", 
+      "\"\<<img src=\\\"_plotfiletmp_\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:_pxwidthtmp_px;\\\">\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"output", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"tmptext", ",", 
+        RowBox[{"\"\<_plotfiletmp_\>\"", "->", "plotfile"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"output", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"output", ",", 
+        RowBox[{"\"\<_pxwidthtmp_\>\"", "\[Rule]", 
+         RowBox[{"ToString", "[", "pxwidth", "]"}]}]}], " ", "]"}]}], ";", 
+     "\[IndentingNewLine]", "output"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.7005114151613007`*^9, 3.700511508164021*^9}, {
+  3.700511592944994*^9, 3.700511726913887*^9}, {3.700511776227229*^9, 
+  3.700511917785483*^9}, {3.7005777489955807`*^9, 3.700577754300817*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"makeplottext", "[", 
+  RowBox[{"filename", ",", "750"}], "]"}]], "Input",
+ CellChangeTimes->{{3.700511923206904*^9, 3.7005119580848513`*^9}}],
+
+Cell[BoxData["\<\"<img src=\\\"corr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:750px;\\\">\"\>"], "Output",
+ CellChangeTimes->{{3.700511934567396*^9, 3.700511958646566*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeplotblock", "[", 
+    RowBox[{
+    "plotfile1in_", ",", "pxwidth1in_", ",", "plotfile2in_", ",", 
+     "pxwidth2in_", ",", "plotfile3in_", ",", "pxwidth3in_", ",", 
+     "plotfile4in_", ",", "pxwidth4in_"}], "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"plotfile1", "=", "plotfile1in"}], ",", 
+       RowBox[{"pxwidth1", "=", "pxwidth1in"}], ",", 
+       RowBox[{"plotfile2", "=", "plotfile2in"}], ",", 
+       RowBox[{"pxwidth2", "=", "pxwidth2in"}], ",", 
+       RowBox[{"plotfile3", "=", "plotfile3in"}], ",", 
+       RowBox[{"pxwidth3", "=", "pxwidth3in"}], ",", 
+       RowBox[{"plotfile4", "=", "plotfile4in"}], ",", 
+       RowBox[{"pxwidth4", "=", "pxwidth4in"}], ",", "\[IndentingNewLine]", 
+       "tmptext", ",", "output"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"tmptext", "=", 
+       RowBox[{
+        RowBox[{"makeplottext", "[", 
+         RowBox[{"plotfile1", ",", "pxwidth1"}], "]"}], "<>", "\"\<\\n\>\"", "<>",
+         "\[IndentingNewLine]", 
+        RowBox[{"makeplottext", "[", 
+         RowBox[{"plotfile2", ",", "pxwidth2"}], "]"}], "<>", "\"\<\\n\>\"", "<>",
+         "\[IndentingNewLine]", "\"\<<br>\>\"", "<>", "\"\<\\n\>\"", "<>", 
+        "\[IndentingNewLine]", 
+        RowBox[{"makeplottext", "[", 
+         RowBox[{"plotfile3", ",", "pxwidth3"}], "]"}], "<>", "\"\<\\n\>\"", "<>",
+         "\[IndentingNewLine]", 
+        RowBox[{"makeplottext", "[", 
+         RowBox[{"plotfile4", ",", "pxwidth4"}], "]"}], "<>", "\"\<\\n\>\"", "<>",
+         "\[IndentingNewLine]", "\"\<<br>\>\""}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"output", "=", 
+       RowBox[{
+       "\"\<<p>\>\"", "<>", "\"\<\\n\>\"", "<>", "tmptext", "<>", 
+        "\"\<\\n\>\"", "<>", "\"\<</p>\>\""}]}], ";", "\[IndentingNewLine]", 
+      "output"}]}], "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.7005777578546762`*^9, 3.70057797229325*^9}, {
+  3.7005780072579813`*^9, 3.700578157552147*^9}, {3.700578226739223*^9, 
+  3.700578232355796*^9}, {3.7005782629165277`*^9, 3.7005782728558197`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"makeplotblock", "[", 
+  RowBox[{
+  "filename", ",", "750", ",", "filename", ",", "750", ",", "filename", ",", 
+   "750", ",", "filename", ",", "750"}], "]"}]], "Input",
+ CellChangeTimes->{{3.700578204337631*^9, 3.700578215173296*^9}}],
+
+Cell[BoxData["\<\"<p>\\n<img src=\\\"corr_xQ_f0.png\\\" alt=\\\"Mountain View\
+\\\" style=\\\"width:750px;\\\">\\n<img src=\\\"corr_xQ_f0.png\\\" \
+alt=\\\"Mountain View\\\" style=\\\"width:750px;\\\">\\n<br>\\n<img \
+src=\\\"corr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" style=\\\"width:750px;\\\
+\">\\n<img src=\\\"corr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" \
+style=\\\"width:750px;\\\">\\n<br>\\n</p>\"\>"], "Output",
+ CellChangeTimes->{{3.700578216620818*^9, 3.7005782435149183`*^9}, {
+  3.7005782762069073`*^9, 3.700578279968116*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"makewebpageoutputall", "[", "outputtextin_", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"outputtext", "=", "outputtextin"}], ",", "tmptext", ",", 
+      "output"}], "}"}], ",", "\[IndentingNewLine]", " ", 
+    RowBox[{
+     RowBox[{
+     "tmptext", "=", "\[IndentingNewLine]", 
+      "\"\<<!DOCTYPE html>\[IndentingNewLine]<html>\[IndentingNewLine]<body>\n\
+_outputtmp_\n\n</body>\n</html>\>\""}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"output", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"tmptext", ",", 
+        RowBox[{"\"\<_outputtmp_\>\"", "->", "outputtext"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "output"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.7005119672173777`*^9, 3.700511978305529*^9}, {
+  3.700512097670638*^9, 3.700512263284658*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"makewebpageoutputall", "[", 
+  RowBox[{"makeplottext", "[", 
+   RowBox[{"filename", ",", "750"}], "]"}], " ", "]"}]], "Input",
+ CellChangeTimes->{{3.7005122717341423`*^9, 3.700512279540266*^9}}],
+
+Cell[BoxData["\<\"<!DOCTYPE \
+html>\[IndentingNewLine]<html>\[IndentingNewLine]<body>\\n<img \
+src=\\\"corr_xQ_f0.png\\\" alt=\\\"Mountain View\\\" style=\\\"width:750px;\\\
+\">\\n\\n</body>\\n</html>\"\>"], "Output",
+ CellChangeTimes->{3.7005122806805067`*^9}]
+}, Open  ]]
+},
+WindowSize->{1535, 876},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 4818, 118, 630, "Input"],
+Cell[CellGroupData[{
+Cell[5401, 142, 190, 2, 51, "Input"],
+Cell[5594, 146, 142, 2, 32, "Output"],
+Cell[5739, 150, 160, 2, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5936, 157, 611, 9, 157, "Input"],
+Cell[6550, 168, 485, 7, 130, "Output"]
+}, Open  ]],
+Cell[7050, 178, 1333, 31, 194, "Input"],
+Cell[CellGroupData[{
+Cell[8408, 213, 165, 3, 35, "Input"],
+Cell[8576, 218, 188, 2, 32, "Output"]
+}, Open  ]],
+Cell[8779, 223, 2231, 46, 343, "Input"],
+Cell[CellGroupData[{
+Cell[11035, 273, 258, 5, 35, "Input"],
+Cell[11296, 280, 540, 7, 203, "Output"]
+}, Open  ]],
+Cell[11851, 290, 952, 23, 303, "Input"],
+Cell[CellGroupData[{
+Cell[12828, 317, 218, 4, 35, "Input"],
+Cell[13049, 323, 261, 4, 148, "Output"]
+}, Open  ]]
+}
+]
+*)
+

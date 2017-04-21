@@ -22,7 +22,7 @@ class CheckBox:
         else:
             self.state = ""
         if clas != None:
-            self.clas = " class='"+clas+"'"
+            self.clas = " "+clas
         else:
             self.clas = ""
         if onUse != None:
@@ -36,7 +36,7 @@ class CheckBox:
         Prints HTML for displaying the checkbox'''
 
         print tabs*'    ' + '<label style="display:inline" class="mdl-checkbox mdl-js-checkbox" for="'+self.name+'">'
-        print tabs*'    ' + '<input type="checkbox" id="'+self.name+'" name="'+self.name+'" class="mdl-checkbox__input"'+self.clas+self.state+self.onUse+'>'
+        print tabs*'    ' + '<input type="checkbox" id="'+self.name+'" name="'+self.name+'" class="mdl-checkbox__input'+self.clas+'"'+self.state+self.onUse+'>'
         print tabs*'    ' + '<span class="mdl-checkbox__label">'+self.label+'</span>'
         print tabs*'    ' + '</label>'
 

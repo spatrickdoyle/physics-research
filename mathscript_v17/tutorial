@@ -1,0 +1,126 @@
+20170222,
+in this version, there is a new mode "quick_save_plot".
+By this mode users do not need to set up " = PDFsetDir !", " = PDFsetmethod !" 
+since the correlation data is stored in correlation_data.m 
+
+what we need to setup:
+"quick_save_plot = runfunc !"
+
+
+" = figureDirtag !" set where to put the output figures
+" = PDFname !" to set which PDFset users want to plot, presently only CT14nnlo is available
+" = datalist !": the path of file "dat16lisformathematica"
+" = expttype !" and " = exptid !": depend on users, deciding which experiments are plotted 
+
+===========================
+How we run:
+math -script correlation_plot_project_v5_script.m
+
+============================
+20170301
+1. the config file is replaced by a new version
+2. work for smu workstation: curie, rubin (Mathematica 10.2)
+3. explanation of new configure file for the web site:
+presently, my Mathematica script only read following arguments, which means
+functions or options for other arguments have not yet been workout:
+PDF set:
+Expt. ID:
+Expt. Flag: 
+
+"PDF set:" is the "PDFname" of old configure file.
+"Expt. ID:" & "Expt. Flag:" are used to replace "= expttype !" & "= exptid !";
+"Expt. ID:" show all possible experimental ID a web user can choose.
+"Expt. Flag:" set 0 & 1 to control whether an ID of "Expt. ID" should be used 
+as data for Mathematica.
+
+---------------------------------
+Checkboxes on the website
+for "...Flag:" in config file,
+we design checkboxes on website, if some boxes are checked, python should 
+set those flags as 1, some that the Mathematica code will run these functions  
+
+ex:
+Figures to plot
+x  Experimental data points
+x  Experimental errors
+x  Residuals
+x  PDF errors on residuals
+x  Correlations with functions
+x  Histograms of correlations
+x  Sensitivity to functions
+x  Histograms of sensitivity
+x  ...
+---------------------------------
+for other arguments in old configure file such as:
+"= figureDirtag !"
+"= datalist !"
+I setup these paths in Mathematica code.
+plots can be found in ./plots
+datalist file could be found in the same Dir of Mathematica main code.
+"= runfunc !"
+web version only runs quicksaveplot mode, so users don't need to choose the run mode.
+"= PDFsetDir !"
+"= PDFsetmethod !"
+"= PDFDataDir !"
+same reason, quicksaveplot mode does not use these arguments
+
+=====================================
+20170308
+config file add new arguments
+"Color by data percentage" allow user to input three number for percentage, ex: 40 65 90,
+which means when you sort data from small to large, the position of the percentage in sorted data.
+The percentage you choose seperate data by these percentage and give different color for these seprerated data in plots.
+
+"Size" allow user to choose point size in plots
+user could choose following sizes: tiny small medium large
+
+"highlight mode" is for every plot type (presently from 1~7???)
+user could choose different way to highlight the data range he want to see
+#mode 0: No highlight. mode 1: highlight data by range of value. mode 2: highlight data by range of percentage
+for mode 1: every plot type has 2 values, val1 val2, means highlight range of value of a data point,
+ex: for "correlation" plots, 0.4  0.75 means data in (0.4,0.75) will be highlighted
+for mode 2: val1 val2 are percentage
+ex: for "correlation" plots, 40  75 means data in (40%,75%) will be highlighted
+
+example for Mathematica code reading these arguments:
+for following config file
+Type:  1     2     3     4     5     6     7
+Mode:  0     2     0     1     0     1     1
+Mode 1 range: 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75 0.5  0.75
+Mode 2 range: 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55 50  86.55
+ 
+code will read
+Type:         1     2         3     4         5     6         7
+Mode:         0     2         0     1         0     1         1
+Mode 1 range: x  x  x   x     x  x  0.5  0.75 x x   0.5  0.75 0.5  0.75
+Mode 2 range: x  x  50  86.55 x  x  x    x x  x x   x         x  x
+
+(
+since mode 0 does not hightlight data, so the code will not use value of mode 1&2 range,
+when user choose any mode, for example mode 1, config still need to have value for other modes for read 
+so that code will not show error message 
+ )
+============================
+20170316
+1. user option for #Functions to use in correlations set in program
+2. size of point in highlight mode automatically set as small
+3. make a meta_data_structure.txt file to record meta data in program
+4. make a fake function of correlation to replace correlation function of library
+(so that user mode corr, dr*corr can be calculated) 
+5. I find the script version and the .nb version get little different outputs, 
+for four plots combined in one by Grid function:
+the .nb makes
+A  B  plots
+C  D 
+script makes
+A     plots
+B
+C  
+D
+     
+========================
+20170420
+1. point size linearly enlarge in lighlighted region
+2. deeper color for PDFCorrelationplot7 (Darker 0.1 -> 0.2) 
+
+ 

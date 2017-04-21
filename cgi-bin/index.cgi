@@ -25,309 +25,15 @@ cgitb.enable()
 #Other things
 import glob,os,time
 
-VERSION = '16' #Version of the Mathematica script
-ASSETS = '../assets/' #Path to HTML page assets
-MATH = './' #Path to Mathematica script bin
-OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
-JS_PREFIX = '../mathscript_v%s/bin/'%VERSION
+#Mathscript interface
+from mathscript import *
 
-CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica script bin directory
-EXPIDS = 'exptidname_inconfig.txt'
-IMAGE = '/exptname_table.png'
+from elements import *
 
 #Set current working directory - this line is necessary on my localhost but not on the server for reasons currently unknown to me
-os.chdir("/home/sean/Programs/git-repos/physics-research/mathscript_v16/bin")
-#os.chdir("../mathscript_v%s/bin"%VERSION)
-
-
-def TAB(num):
-    #TAB(int num)
-    #num: number of indentations
-    #return: a string of whitespace of length num*4
-    #Generates a string of num tabs, for formatting the generated HTML nicely
-
-    return ('    '*num)
-
-def makeConfig(boxes,radios,texts,selects,expids):
-    #makeConfig(List boxes, List radios, List texts)
-    #boxes: list of mdl CheckBox elements
-    #radios: list of mdl RadioBox elements
-    #texts: list of mdl Text elements
-    #selects: list of drop down menu elements
-    #expids: list of experiment ids to include in the config file
-    #return: the job ID associated with the submission
-    #Generates and writes the configuration file for the given set of parameters
-
-    #Open the file itself
-    configFile = open(MATH+CONFIG,'w+')
-    #Write the version of the Mathematica script
-    configFile.write("#Version %s\n"%VERSION)
-    #Write the timestamp
-    configFile.write(time.strftime("#%X %x\n\n"))
-
-    #Generate the job ID
-    boxStr = str(int(''.join([str(int(box.getState())) for box in boxes])))
-
-    radStr = str(int(''.join([str(rad.getState()) for rad in radios])))
-
-    textStr = ''.join([t.getState() for t in texts])
-
-    jobStr = boxStr+radStr+textStr
-    jobID = str(int(sum([(ord(jobStr[i])-45)*i for i in range(len(jobStr))])))
-
-    #Job ID
-    configFile.write("Job ID (copy from the counter file): %s\n"%jobID)
-
-    #PDF set
-    configFile.write("PDF set: CT14NNLO\n\n")
-
-    #Generate the sections for figure to plot, experiments to include, and functions to use
-    typestr = [0 for i in range(6)]
-    flagstr = ""
-    funcstr = [0 for i in range(15)]
-    figures = []
-    if boxes[exp_boxes].getState():
-        typestr[0] = 1
-    typestr[int(boxes[exp_boxes+1].getState())+1] = 1
-    typestr = "     "+("     ".join([str(i) for i in typestr]))
-    #for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
-    #    typestr += "     %d"%box.getState()
-    #    figures.append(box.getState())
-    for box in boxes[1:exp_boxes]:
-        flagstr += "     %d"%box.getState()
-    #for box in boxes[exp_boxes+fig_boxes:exp_boxes+fig_boxes+func_boxes]:
-    #    funcstr += "%d     "%box.getState()
-    if boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
-        funcstr[-1] = 1
-    funcstr[int(boxes[exp_boxes+fig_boxes].getState())] = 1
-    funcstr = ("     ".join([str(i) for i in funcstr]))
-
-    #Type
-    configFile.write("Type:  1     2     3     4     5     6     7\n")
-    #Flag
-    configFile.write("Flag:%s     0\n\n"%(typestr[3:]))
-
-    #Expt. ID
-    configFile.write("Expt. ID:   "+''.join([i[0]+"   " for i in expids])+"\n")
-    #Expt. Flag
-    configFile.write("Expt. Flag:%s\n\n"%(flagstr[3:]))
-
-    #Type
-    configFile.write("Type:  bb   cb   sb     db    ub     g     u     d     s     c     b    q6   q7    q8   user\n")
-    #Flag
-    configFile.write("Flag:  %s\n\n"%funcstr)
-
-    #Name
-    configFile.write("Name: %s\n"%texts[20].getState())
-    #Values
-    configFile.write("Values: %s\n\n"%texts[21].getState())
-
-    bounds = []
-    for t in texts[22:29]:
-        bounds.append(t.getState())
-
-    for i in range(exp_boxes+fig_boxes+func_boxes,exp_boxes+fig_boxes+func_boxes+auto_boxes):
-        if boxes[i].getState():
-            bounds[i-(exp_boxes+fig_boxes+func_boxes)] = 'auto'
-
-    configFile.write("xmin,   xmax:  %s   %s\n"%(bounds[0],bounds[1]))
-    configFile.write("mumin, mumax:      %s %s\n\n"%(bounds[2],bounds[3]))
-
-    configFile.write("Number of bins: %s\n"%(bounds[4]))
-    configFile.write("xmin, xmax: %s  %s\n"%(bounds[5],bounds[6]))
-    configFile.write("ymin, ymax:  0 auto\n\n")
-
-    configFile.write("Color by data percentage: 50 70 85\n\n")
-
-    configFile.write("Type:  1     2     3     4     5     6     7\n")
-    configFile.write("Mode:  0     %d     %d     %d     %d     %d     0\n"%(selects[0].getState(),selects[1].getState(),selects[2].getState(),selects[3].getState(),selects[4].getState()))
-
-    configFile.write("Mode 1 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n"%(texts[0].getState(),texts[1].getState(),texts[4].getState(),texts[5].getState(),texts[8].getState(),texts[9].getState(),texts[12].getState(),texts[13].getState(),texts[16].getState(),texts[17].getState()))
-    configFile.write("Mode 2 range: 0.0  0.0 %s  %s %s  %s %s  %s %s  %s %s  %s 0.0  0.0\n\n"%(texts[2].getState(),texts[3].getState(),texts[6].getState(),texts[7].getState(),texts[10].getState(),texts[11].getState(),texts[14].getState(),texts[15].getState(),texts[18].getState(),texts[19].getState()))
-
-    configFile.write("Size: %s\n\n"%(radios[1].labels[int(radios[1].getState())].lower()))
-
-
-    configFile.close()
-
-    #IMAGE = []
-    #obsname = ["xQbyexpt","expt_error_ratio","residue","dr","corrdr","corr"]
-    #for i in range(6):
-    #    if figures[i]:
-    #        IMAGE.append(obsname[i]+"_xQ.png")
-    #return (jobID,IMAGE)
-    return jobID
-
-def makeGraph(jobID):
-    #makeGraph(string jobID)
-    #jobID: the ID of the job that is invoking the Mathematica script
-    #Make a lockfile, invoke the Mathematica script, wait until the graph has been generated, and display it
-
-    #Create lockfile containing job ID of the image being generated
-    lockfile = file(MATH+'lock','w+')
-    lockfile.write("%s\n%s\n%s\n%s\n"%(jobID,time.strftime("%X %x"),os.environ["REMOTE_ADDR"],os.environ['HTTP_USER_AGENT']))#Write job ID, time and date of creation, invoking host ip, and user agent 
-    lockfile.close()
-
-    #Invoke the program
-    os.system("math -script "+MATH+"correlation_plot_project_v"+VERSION+"_script.m > log.txt&")
-
-    #Check every 2 seconds to see if the graph is done being generated, and display it when it is
-    path = JS_PREFIX+OUTPUT+jobID+IMAGE
-    #print TAB(2)+"<img id='graph' src='"+ASSETS+"state_loading.jpg'/><br/>\n"
-    print TAB(2)+"<h3 id='graph'>Loading...<h3/><br/>\n"
-    #print TAB(2)+"""<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); document.getElementById('graph').src = "%s"; }; }, 2000);</script>"""%(path,path)
-    print TAB(2)+"""<script>var loop = setInterval(function() { if (UrlExists("%s")) { clearInterval(loop); document.getElementById('graph').innerHTML = "<a onclick='window.location.reload()'>Click to view plots</a>"; }; }, 2000);</script>"""%(path)
-
+os.chdir(CWD)
 
 #Create all the input elements that will be on the page
-
-#Generate list of experiment IDs and their associated string names (currently 111 elements long)
-idFile = file(MATH+EXPIDS,'r')
-expids = [i.split() for i in idFile.readlines()]
-expids = [i for i in expids if len(i) != 0]
-
-#Checkboxes
-exp_boxes = 41
-fig_boxes = 2#6
-func_boxes = 2#15
-auto_boxes = 4
-boxes = [
-    #Experiments to include
-    mdl.CheckBox('allexps','All',False,'expid','checkAllExps();') #'Select all' box
- ]+[mdl.CheckBox(i[0],i[1],False,'expid') for i in expids]+[
-
-    #Figures to plot
-    mdl.CheckBox('type1','Experimental data points',False),
-    mdl.RadioBox('figtype',[
-        'Experimental errors',
-        'Residuals',
-        'PDF errors on residuals',
-        'Sensitivity factor'
-        ,'Correlation'
-    ],0,[
-        'toggleRadio(0,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
-        'toggleRadio(1,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
-        'toggleRadio(2,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
-        'toggleRadio(3,["highlight0","highlight1","highlight2","highlight3","highlight4"])',
-        'toggleRadio(4,["highlight0","highlight1","highlight2","highlight3","highlight4"])'
-    ]),
-    #mdl.CheckBox('type2','Experimental errors',False,None,"toggleBlock2('highlight0')"),
-    #mdl.CheckBox('type3','Residuals',False,None,"toggleBlock2('highlight1')"),
-    #mdl.CheckBox('type4','PDF errors on residuals',False,None,"toggleBlock2('highlight2')"),
-    #mdl.CheckBox('type5','Sensitivity factor',False,None,"toggleBlock2('highlight3')"),
-    #mdl.CheckBox('type6','Correlation',False,None,"toggleBlock2('highlight4')"),
-
-    #Functions to use
-    mdl.RadioBox('function',[
-        'b<span class="bar">&#x203e;</span>',
-        'c<span class="bar">&#x203e;</span>',
-        's<span class="bar">&#x203e;</span>',
-        'd<span class="bar">&#x203e;</span>',
-        'u<span class="bar">&#x203e;</span>',
-        'g',
-        'u',
-        'd',
-        's',
-        'c',
-        'b',
-        'q6',
-        'q7',
-        'q8'
-    ]),
-    #mdl.CheckBox('func1','b<span class="bar">&#x203e;</span>',False),
-    #mdl.CheckBox('func2','c<span class="bar">&#x203e;</span>',False),
-    #mdl.CheckBox('func3','s<span class="bar">&#x203e;</span>',False),
-    #mdl.CheckBox('func4','d<span class="bar">&#x203e;</span>',False),
-    #mdl.CheckBox('func5','u<span class="bar">&#x203e;</span>',False),
-    #mdl.CheckBox('func6','g',False),
-    #mdl.CheckBox('func7','u',False),
-    #mdl.CheckBox('func8','d',False),
-    #mdl.CheckBox('func9','s',False),
-    #mdl.CheckBox('func10','c',False),
-    #mdl.CheckBox('func11','b',False),
-    #mdl.CheckBox('func12','q6',False),
-    #mdl.CheckBox('func13','q7',False),
-    #mdl.CheckBox('func14','q8',False),
-    mdl.CheckBox('func15','user',False,None,"toggleBlock2('user')"),
-
-    #Figure range 'auto' boxes
-    mdl.CheckBox('xauto','Auto',True,None,"toggleBlock2('auto1')"),
-    mdl.CheckBox('muauto','Auto',True,None,"toggleBlock2('auto2')"),
-    mdl.CheckBox('hxauto','Auto',True,None,"toggleBlock2('auto3')"),
-    mdl.CheckBox('yauto','Auto',True,None,"toggleBlock2('auto4')")
-]
-
-#Radio buttons
-radios = [
-    #PDF set [0]
-    mdl.RadioBox('pdfset',['CT14NNLO']),
-
-    #Point size [1]
-    mdl.RadioBox('pointsize',[
-        'Tiny',
-        'Small',
-        'Medium',
-        'Large'
-    ])
-]
-
-#Text inputs
-texts = [
-    #Value and percentage ranges for highlight mode functions 2-6 [0:20]
-    mdl.Text('vmin2','Min',1,0.0),
-    mdl.Text('vmax2','Max',1,0.0),
-    mdl.Text('pmin2','Min',1,0.0),
-    mdl.Text('pmax2','Max',1,0.0),
-    mdl.Text('vmin3','Min',1,0.0),
-    mdl.Text('vmax3','Max',1,0.0),
-    mdl.Text('pmin3','Min',1,0.0),
-    mdl.Text('pmax3','Max',1,0.0),
-    mdl.Text('vmin4','Min',1,0.0),
-    mdl.Text('vmax4','Max',1,0.0),
-    mdl.Text('pmin4','Min',1,0.0),
-    mdl.Text('pmax4','Max',1,0.0),
-    mdl.Text('vmin5','Min',1,0.0),
-    mdl.Text('vmax5','Max',1,0.0),
-    mdl.Text('pmin5','Min',1,0.0),
-    mdl.Text('pmax5','Max',1,0.0),
-    mdl.Text('vmin6','Min',1,0.0),
-    mdl.Text('vmax6','Max',1,0.0),
-    mdl.Text('pmin6','Min',1,0.0),
-    mdl.Text('pmax6','Max',1,0.0),
-
-    #User function parameter [20:22]
-    mdl.Text('userparamname','Name',0),
-    mdl.Text('57values','Enter 57 values',0),
-
-    #Window bounds for graph [22:31]
-    mdl.Text('xmin','X-min',1,0.00001),
-    mdl.Text('xmax','X-max',1,1),
-    mdl.Text('mumin','&#x03bc;-min',1,1.0),
-    mdl.Text('mumax','&#x03bc;-max',1,2000),
-    mdl.Text('nbin','Nbin',1,20),
-    mdl.Text('hxmin','X-min',1,-3),
-    mdl.Text('hxmax','X-max',1,3),
-    mdl.Text('ymin','Y-min',1,0),
-    mdl.Text('ymax','Y-max',1,10)
-]
-
-#Select elements
-selects = [
-    #Dropdowns for highlight mode (figures 2-6) [0:5]
-    #mdl.Select('wtype1',['No highlighting','Value range','Percentage range']),
-    mdl.Select('wtype2',['No highlighting','Value range','Percentage range']),#,"changeFunc('s1')","s1"),
-    mdl.Select('wtype3',['No highlighting','Value range','Percentage range']),
-    mdl.Select('wtype4',['No highlighting','Value range','Percentage range']),
-    mdl.Select('wtype5',['No highlighting','Value range','Percentage range']),
-    mdl.Select('wtype6',['No highlighting','Value range','Percentage range'])
-]
-
-#Buttons
-buttons = [
-    mdl.Button('button1','SUBMIT'), #[0]
-    mdl.Button('button2','RESET','resetbutton') #[1]
-]
-
 
 #Get data from submitted form
 form = cgi.FieldStorage()
@@ -361,14 +67,8 @@ print TAB(2)+"<h2>Southern Methodist University Physics Department</h2>\n"
 
 #Update input elements based on previous form submission
 if len(form) != 0:
-    for box in boxes:
-        box.checkState(form)
-    for rad in radios:
-        rad.checkState(form)
-    for s in selects:
-        s.checkState(form)
-    for t in texts:
-        t.checkState(form)
+    for element in all_elements:
+        element.checkState(form)
 
 #Generate the actual HTML form and draw all the input elements
 
@@ -378,12 +78,10 @@ print TAB(3)+'<table>'
 print TAB(4)+'<tr>'
 print TAB(5)+'<td>'
 
-#PDFset and size of points
+#PDFset
 print TAB(6)+'Choose PDF set:<br/>'
-radios[0].draw(6)
+pdfset.draw(6)
 print TAB(6)+'<br/>\n'
-print TAB(6)+'Size of data points:<br/>'
-radios[1].draw(6)
 
 print TAB(5)+'</td>\n'
 
@@ -395,28 +93,28 @@ print TAB(6)+'<table>'
 
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="width:20%;border:none">'
-boxes[0].draw(9)
+exp_boxes[0].draw(9) #'All' box
 print TAB(8)+'</td>'
 print TAB(7)+'</tr>\n'
 
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[1:int(exp_boxes/4)]:
+for box in exp_boxes[1:int(len(exp_boxes)/4)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[int(exp_boxes/4):int(exp_boxes/2)]:
+for box in exp_boxes[int(len(exp_boxes)/4):int(len(exp_boxes)/2)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[int(exp_boxes/2):int(3*exp_boxes/4)]:
+for box in exp_boxes[int(len(exp_boxes)/2):int(3*len(exp_boxes)/4)]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(8)+'<td style="width:20%;border:none">'
-for box in boxes[int(3*exp_boxes/4):exp_boxes]:
+for box in exp_boxes[int(3*len(exp_boxes)/4):]:
     box.draw(9)
     print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
@@ -436,7 +134,7 @@ print TAB(6)+'Figures to plot:<br/><br/>\n'
 print TAB(6)+'<table>'
 
 print TAB(7)+'<tr>'
-for box in boxes[exp_boxes:exp_boxes+fig_boxes]:
+for box in fig_boxes:
     print TAB(8)+'<td style="width: 17%">'
     box.draw(9)
     print TAB(8)+'</td>'
@@ -444,8 +142,8 @@ print TAB(7)+'</tr>\n'
 
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
-for s in range(0,5):
-    if boxes[exp_boxes+1].getState() != s:
+for s in range(5):
+    if fig_boxes[1].getState() != s:
         if (len(form) == 0)and(s == 0):
             print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(s)
         else:
@@ -461,18 +159,29 @@ print TAB(7)+'</tr>\n'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
 for t in range(5):
-    if boxes[exp_boxes+1].getState() != t:
-        if (len(form) == 0)and(t == 0):
-            print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
-        else:
-            print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
-
+    if ((fig_boxes[1].getState() != t) and not ((len(form) == 0)and(t == 0))) or (selects[t].getState() != 0):
+        print TAB(8)+'<td class="highlight%d mode0 fadeOut"><span>'%(t)
     else:
-        print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
-    print TAB(9)+'Input range of values:<br/>'
-    texts[4*t].draw(9)
+        print TAB(8)+'<td class="highlight%d mode0 fadeIn"><span>'%(t)
+    print TAB(6)+'Size of data points:<br/>'
+    sizes[t].draw(6)
+
     print TAB(9)+'<br/>'
-    texts[4*t +1].draw(9)
+    print TAB(8)+'</span></td>'
+print TAB(7)+'</tr>'
+
+
+print TAB(7)+'<tr>'
+print TAB(8)+'<td style="visibility:hidden"></td>'
+for t in range(5):
+    if ((fig_boxes[1].getState() != t) and not ((len(form) == 0)and(t == 0))) or (selects[t].getState() != 1):
+        print TAB(8)+'<td class="highlight%d mode1 fadeOut"><span>'%(t)
+    else:
+        print TAB(8)+'<td class="highlight%d mode1 fadeIn"><span>'%(t)
+    print TAB(9)+'Input range of values:<br/>'
+    vmins[t].draw(9)
+    print TAB(9)+'<br/>'
+    vmaxs[t].draw(9)
 
     print TAB(9)+'<br/>'
     print TAB(8)+'</span></td>'
@@ -481,19 +190,14 @@ print TAB(7)+'</tr>'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td style="visibility:hidden"></td>'
 for t in range(5):
-    if boxes[exp_boxes+1].getState() != t:
-        if (len(form) == 0)and(t == 0):
-            print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
-        else:
-            print TAB(8)+'<td class="highlight%d fadeOut"><span>'%(t)
-
+    if ((fig_boxes[1].getState() != t) and not ((len(form) == 0)and(t == 0))) or (selects[t].getState() != 2):
+        print TAB(8)+'<td class="highlight%d mode2 fadeOut"><span>'%(t)
     else:
-        print TAB(8)+'<td class="highlight%d fadeIn"><span>'%(t)
-
+        print TAB(8)+'<td class="highlight%d mode2 fadeIn"><span>'%(t)
     print TAB(9)+'Input range of percentages:<br/>'
-    texts[4*t +2].draw(9)
+    pmins[t].draw(9)
     print TAB(9)+'<br/>'
-    texts[4*t +3].draw(9)
+    pmaxs[t].draw(9)
     print TAB(8)+'</span></td>'
 print TAB(7)+'</tr>'
 
@@ -511,32 +215,32 @@ print TAB(6)+'<table>'
 
 print TAB(7)+'<tr>'
 print TAB(8)+'<td>'
-boxes[exp_boxes+fig_boxes+1].draw(9)
+func_boxes[1].draw(9)
 print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(7)+'</tr>'
 
-if not boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
+if not func_boxes[1].getState():
     print TAB(7)+'<tr class="user fadeIn">'
 else:
     print TAB(7)+'<tr class="user fadeOut">'
 print TAB(8)+'<td>'
-boxes[exp_boxes+fig_boxes].draw(9)
+func_boxes[0].draw(9)
 print TAB(9)+'<br/>'
 print TAB(8)+'</td>'
 print TAB(7)+'</tr>'
 
 print TAB(6)+'</table>\n'
 
-if not boxes[exp_boxes+fig_boxes+func_boxes-1].getState():
+if not func_boxes[1].getState():
     print TAB(6)+'<table class="user fadeOut">'
 else:
     print TAB(6)+'<table class="user fadeIn">'
 print TAB(7)+'<tr>'
 print TAB(8)+'<td>'
-texts[20].draw(9)
+user_func[0].draw(9)
 print TAB(9)+'<br/><br/>'
-texts[21].draw(9)
+user_func[1].draw(9)
 print TAB(8)+'</td>'
 print TAB(7)+'</tr>'
 print TAB(6)+'</table>\n'
@@ -551,55 +255,55 @@ print TAB(4)+'<tr>'
 
 print TAB(5)+'<td>'
 print "Data plot X range:<br/>"
-boxes[exp_boxes+fig_boxes+func_boxes].draw(6)
+auto_boxes[0].draw(6)
 print TAB(6)+'<br/><br/>'
-if boxes[exp_boxes+fig_boxes+func_boxes].getState():
-    print "<span class='auto1 fadeOut'>"
+if auto_boxes[0].getState():
+    print "<span class='auto0 fadeOut'>"
 else:
-    print "<span class='auto1 fadeIn'>"
-texts[22].draw(6)
+    print "<span class='auto0 fadeIn'>"
+bounds[0].draw(6)
 print TAB(6)+'<br/><br/>'
-texts[23].draw(6)
+bounds[1].draw(6)
 print TAB(6)+'<br/>'
 print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
 print "Data plot &#x03bc; range:<br/>"
-boxes[exp_boxes+fig_boxes+func_boxes+1].draw(6)
+auto_boxes[1].draw(6)
 print TAB(6)+'<br/><br/>'
-if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
-    print "<span class='auto2 fadeOut'>"
+if auto_boxes[1].getState():
+    print "<span class='auto1 fadeOut'>"
 else:
-    print "<span class='auto2 fadeIn'>"
-texts[24].draw(6)
+    print "<span class='auto1 fadeIn'>"
+bounds[2].draw(6)
 print TAB(6)+'<br/><br/>'
-texts[25].draw(6)
+bounds[3].draw(6)
 print TAB(6)+'<br/>'
 print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
 print "Histogram data range:<br/>"
-boxes[exp_boxes+fig_boxes+func_boxes+2].draw(6)
+auto_boxes[2].draw(6)
 print TAB(6)+'<br/><br/>'
-if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
-    print "<span class='auto3 fadeOut'>"
+if auto_boxes[2].getState():
+    print "<span class='auto2 fadeOut'>"
 else:
-    print "<span class='auto3 fadeIn'>"
-texts[26].draw(6)
+    print "<span class='auto2 fadeIn'>"
+bounds[4].draw(6)
 print TAB(6)+'<br/>'
 print TAB(5)+'</span></td>'
 
 print TAB(5)+'<td>'
 print "Histogram X range:<br/>"
-boxes[exp_boxes+fig_boxes+func_boxes+3].draw(6)
+auto_boxes[3].draw(6)
 print TAB(6)+'<br/><br/>'
-if boxes[exp_boxes+fig_boxes+func_boxes+1].getState():
-    print "<span class='auto4 fadeOut'>"
+if auto_boxes[3].getState():
+    print "<span class='auto3 fadeOut'>"
 else:
-    print "<span class='auto4 fadeIn'>"
-texts[27].draw(6)
+    print "<span class='auto3 fadeIn'>"
+bounds[-2].draw(6)
 print TAB(6)+'<br/><br/>'
-texts[28].draw(6)
+bounds[-1].draw(6)
 print TAB(6)+'<br/>'
 print TAB(5)+'</span></td>'
 
@@ -620,7 +324,7 @@ print TAB(2)+'<br/><br/><br/>\n'
 if len(form) != 0:
 
     #Write the Mathematica configuration file
-    jobID = makeConfig(boxes,radios,texts,selects,expids)
+    jobID = makeConfig(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmaxs,pmins,pmaxs,user_func,bounds,selects,expids)
 
     #Check if the graph being requested has already been generated and stored
 
@@ -637,14 +341,14 @@ if len(form) != 0:
         print "<table style='width:100%'><tr>"
         for image in images:
             if "_xQ" in image:
-                print "<td style='width:3000px;border:none'>"
-                print TAB(2)+"<img style='width:100%' src='"+JS_PREFIX+image+"'/><br/>\n"
+                print "<td style='text-align:center;width:3000px;border:none'>"
+                print TAB(2)+"<img style='width:100%;max-width:800px' src='"+JS_PREFIX+image+"'/><br/>\n"
                 print "<a href='../mathscript_v16/"+JS_PREFIX+image+"'>View full image</a></td>"
         print "</tr><br/><tr>"
 
         print "</tr></table>"
 
-        print "<table style='width:40%'><tr>"
+        print "<table style='width:30%'><tr>"
 
         for image in images:
             if "_legend" in image:
