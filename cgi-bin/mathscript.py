@@ -1,4 +1,4 @@
-import os,time
+import os,time,glob
 from elements import *
 
 def TAB(num):
@@ -14,6 +14,16 @@ def makeConfig(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmax
     #expids: list of experiment ids to include in the config file
     #return: the job ID associated with the submission
     #Generates and writes the configuration file for the given set of parameters
+
+    print os.getcwd()+"<br/>"
+    testFile = file(MATH+CONFIG,'r')
+    for line in testFile.readlines():
+        print line+"<br/>"
+    testFile.close()
+    testFile = file(MATH+CONFIG,'w')
+    testFile.write("THIS IS A TEST")
+    testFile.close()
+
 
     #Open the file itself
     configFile = open(MATH+CONFIG,'w+')

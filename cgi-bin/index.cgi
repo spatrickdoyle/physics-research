@@ -28,10 +28,10 @@ import glob,os,time
 #Mathscript interface
 from mathscript import *
 
-from elements import *
+#from elements import *
 
 #Set current working directory - this line is necessary on my localhost but not on the server for reasons currently unknown to me
-os.chdir(CWD)
+#os.chdir(CWD)
 
 #Create all the input elements that will be on the page
 
