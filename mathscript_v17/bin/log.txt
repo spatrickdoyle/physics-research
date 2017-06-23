@@ -1,22 +1,19 @@
 begin function
-input arguments: {1607282, CT14NNLO, {1, 2, 3, 4, 5, 6, 7}, {1, 0, 0, 1, 0, 0, 0}, {701, 702, 703, 159, 101, 102, 103, 104, 106, 108, 109, 110, 111, 124, 125, 126, 127, 147, 201, 203, 204, 225, 227, 231, 234, 260, 261, 504, 514, 145, 169, 267, 268, 535, 240, 241, 281, 265, 266, 538}, {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {bb, cb, sb, db, ub, g, u, d, s, c, b, q6, q7, q8, user}, {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},  , {}, {auto, auto}, {1., 2000.}, 20., {0., 10.}, {0, auto}, {50, 70, 85}, medium, {1, 2, 3, 4, 5, 6, 7}, {0, 0, 0, 0, 0, 0, 0}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}}
+input arguments: {1608507, CT14NNLO, {1, 2, 3, 4, 5, 6, 7}, {0, 1, 0, 0, 0, 0, 0}, {701, 702, 703, 159, 101, 102, 103, 104, 106, 108, 109, 110, 111, 124, 125, 126, 127, 147, 201, 203, 204, 225, 227, 231, 234, 260, 261, 504, 514, 145, 169, 267, 268, 535, 240, 241, 281, 265, 266, 538}, {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {bb, cb, sb, db, ub, g, u, d, s, c, b, q6, q7, q8, user}, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  , {}, {auto, auto}, {auto, auto}, 20., {0., 10.}, {0, auto}, {50, 70, 85}, tiny, {1, 2, 3, 4, 5, 6, 7}, {0, 0, 0, 0, 0, 0, 0}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}}
 present directory:
 /home/sean/Programs/git-repos/physics-research/mathscript_v17/bin
 quick correlation data:
 ../quick_data/CT14NNLO_correlation_data.m
 loading quick correlation data...
 read experimental id
-expt list: {102, 125, 126}
-expt list in the ./quick_data: {102, 125, 126}
+the exptid = {103}are not found in database
+expt list: {103, 106}
+expt list in the ./quick_data: {106}
+{32}
 {}
-{}
+{1}
 {0}
-{0}
-making plot of figure type 1
-
-ListLogLogPlot::prng: Value of option PlotRange -> {{auto, auto}, {1., 2000.}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
-making table of experiments included in plots
-making plot of figure type 4
+making plot of figure type 2
 
                                  1
 Power::infy: Infinite expression -- encountered.
@@ -32,8 +29,8 @@ Power::infy: Infinite expression -- encountered.
 
 General::stop: Further output of Power::infy will be suppressed during this calculation.
 
-ListPlot::prng: Value of option PlotRange -> {{Log[auto], Log[auto]}, {0., 7.6009}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
+ListPlot::prng: Value of option PlotRange -> {{Log[auto], Log[auto]}, {Log[auto], Log[auto]}} is not All, Full, Automatic, a positive machine number, or an appropriate list of range specifications.
 making table of experiments included in plots
-time to make plots is {5.650352, Null} seconds
+time to make plots is {4.625421, Null} seconds
 making table of experiments included in plots
-total time to run is {6.883099, Null} seconds
+total time to run is {5.905995, Null} seconds
