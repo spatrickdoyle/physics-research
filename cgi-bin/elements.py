@@ -8,8 +8,8 @@ JS_PREFIX = '../mathscript_v%s/bin/'%VERSION
 OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
 ASSETS = '../assets/' #Path to HTML page assets
 IMAGE = '/exptname_table.png'
-CWD = "/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION
-#CWD = "../mathscript_v%s/bin"%VERSION
+#CWD = "/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION
+CWD = "../mathscript_v%s/bin/"%VERSION
 
 os.chdir(CWD)
 
