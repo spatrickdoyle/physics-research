@@ -15,10 +15,10 @@ def makeConfig(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmax
     #return: the job ID associated with the submission
     #Generates and writes the configuration file for the given set of parameters
 
-    print os.getcwd()+"<br/>"
+    #print os.getcwd()+"<br/>"
     testFile = file(MATH+CONFIG,'r')
-    for line in testFile.readlines():
-        print line+"<br/>"
+    #for line in testFile.readlines():
+    #    print line+"<br/>"
     testFile.close()
     testFile = file(MATH+CONFIG,'w')
     testFile.write("THIS IS A TEST")

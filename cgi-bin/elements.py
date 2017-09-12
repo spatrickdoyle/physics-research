@@ -9,7 +9,7 @@ OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a s
 ASSETS = '../assets/' #Path to HTML page assets
 IMAGE = '/exptname_table.png'
 #CWD = "/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION
-CWD = "../mathscript_v%s/bin/"%VERSION
+CWD = "./mathscript_v%s/bin/"%VERSION
 
 os.chdir(CWD)
 
@@ -18,6 +18,7 @@ idFile = file(MATH+EXPIDS,'r')
 expids = [i.split() for i in idFile.readlines()]
 expids = [i for i in expids if len(i) != 0]
 idFile.close()
+
 
 #Experiments to include
 exp_boxes = [
