@@ -152,7 +152,7 @@ def makeGraph(jobID):
 
     #Invoke the program
     log("Running script at "+AMATH+"correlation_plot_project_v"+VERSION+"_script.m")
-    os.system("math -script "+AMATH+"correlation_plot_project_v"+VERSION+"_script.m &> /home/sean/log.txt &")
+    os.system("math -script "+AMATH+"correlation_plot_project_v"+VERSION+"_script.m &")
 
     #Check every 2 seconds to see if the graph is done being generated, and display it when it is
     path = ROUTPUT+jobID+IMAGE
