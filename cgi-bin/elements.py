@@ -1,20 +1,20 @@
 import mdl,os
 
 VERSION = '17' #Version of the Mathematica script
-MATH = './' #Path to Mathematica script bin
+RROOT = '../' #Relative root, use for links
+AROOT = '/home/sean/Programs/git-repos/physics-research/' #'/htdocs/seand/' #Absolute root, use for file accessing
+AMATH = AROOT+'mathscript_v%s/bin/'%VERSION #Path to Mathematica script bin
+RMATH = RROOT+'mathscript_v%s/bin/'%VERSION #Relative path to Mathematica script bin
+ASSETS = '../assets/' #Path to HTML page assets
+AOUTPUT = AROOT+'mathscript_v%s/plots/Jobs/'%VERSION #Path to output directory - the script will create a separate  folder here for each unique job ID
+ROUTPUT = RROOT+'mathscript_v%s/plots/Jobs/'%VERSION
+
 EXPIDS = 'exptidname_inconfig.txt'
 CONFIG = 'config1.txt' #Name of config file to be generated in the Mathematica script bin directory
-JS_PREFIX = '../mathscript_v%s/bin/'%VERSION
-OUTPUT = '../plots/Jobs/' #Path to output directory - the script will create a separate  folder here for each unique job ID
-ASSETS = '../assets/' #Path to HTML page assets
 IMAGE = '/exptname_table.png'
-#CWD = "/home/sean/Programs/git-repos/physics-research/mathscript_v%s/bin"%VERSION
-CWD = "./mathscript_v%s/bin/"%VERSION
-
-os.chdir(CWD)
 
 #Generate list of experiment IDs and their associated string names (currently 111 elements long)
-idFile = file(MATH+EXPIDS,'r')
+idFile = file(AMATH+EXPIDS,'r')
 expids = [i.split() for i in idFile.readlines()]
 expids = [i for i in expids if len(i) != 0]
 idFile.close()
