@@ -2,7 +2,7 @@ import mdl,os
 
 VERSION = '17' #Version of the Mathematica script
 RROOT = '../' #Relative root, use for links
-AROOT = '/home/sean/Programs/git-repos/physics-research/' #'/htdocs/seand/' #Absolute root, use for file accessing
+AROOT = '/htdocs/seand/' #Absolute root, use for file accessing
 AMATH = AROOT+'mathscript_v%s/bin/'%VERSION #Path to Mathematica script bin
 RMATH = RROOT+'mathscript_v%s/bin/'%VERSION #Relative path to Mathematica script bin
 ASSETS = '../assets/' #Path to HTML page assets
