@@ -71,7 +71,7 @@ if len(form) != 0:
 
 #Generate the actual HTML form and draw all the input elements
 
-print TAB(2)+'<form action="index.cgi" method="post" style="display:inline" id="theForm">'
+print TAB(2)+'<form action="index.py" method="post" style="display:inline" id="theForm">'
 
 print TAB(3)+'<table>'
 print TAB(4)+'<tr>'

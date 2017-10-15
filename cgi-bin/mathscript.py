@@ -39,7 +39,7 @@ def makeConfig(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmax
         jobID = getJobID(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmaxs,pmins,pmaxs,user_func,bounds,selects,expids)
 
         #Job ID
-        configFile.write("Job ID: %s\n"%jobID)
+        configFile.write("Job ID (copy from the counter file): %s\n"%jobID)
 
         #PDF set
         configFile.write("PDF set: CT14NNLO\n\n")
