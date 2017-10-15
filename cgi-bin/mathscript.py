@@ -1,4 +1,4 @@
-import os,time,glob
+import os,time,glob,sys
 from elements import *
 
 def TAB(num):
@@ -125,7 +125,7 @@ def makeConfig(exp_boxes,fig_boxes,func_boxes,auto_boxes,pdfset,sizes,vmins,vmax
         #    if figures[i]:
         #        IMAGE.append(obsname[i]+"_xQ.png")
     except:
-        log("Failed with "+sys.exec_info()[0].__name__)
+        #log("Failed with "+sys.exec_info()[0].__name__)
         raise
 
     return jobID
@@ -145,7 +145,7 @@ def makeGraph(jobID):
         lockfile.write("%s\n%s\n%s\n%s\n"%(jobID,time.strftime("%X %x"),os.environ["REMOTE_ADDR"],os.environ['HTTP_USER_AGENT']))#Write job ID, time and date of creation, invoking host ip, and user agent 
         lockfile.close()
     except:
-        log("Failed with "+sys.exec_info()[0].__name__)
+        #log("Failed with "+sys.exec_info()[0].__name__)
         raise
 
     log("Successfully wrote lock file")

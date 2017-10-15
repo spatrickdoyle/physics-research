@@ -23,7 +23,7 @@ import cgitb
 cgitb.enable()
 
 #Other things
-import glob,os,time
+import glob,os,time,sys
 
 #Mathscript interface
 from mathscript import *
@@ -61,6 +61,7 @@ print TAB(2)+"<script src='%sindex.js'></script>"%ASSETS
 print TAB(1)+"</head>"
 
 print TAB(1)+"<body>"
+print "UPDATED AT 2:06<br/>"
 print TAB(2)+"<h1>LHC Particle Distributions</h1>"
 print TAB(2)+"<h2>Southern Methodist University Physics Department</h2>\n"
 
@@ -389,7 +390,7 @@ if len(form) != 0:
                 prevID = lockfile.readline()[:-1]
                 lockfile.close()
             except:
-                log("Failed with"+sys.exec_info()[0].__name__)
+                #log("Failed with"+sys.exc_info()[0].__name__)
                 raise
 
             log("Successfully read lock file")
